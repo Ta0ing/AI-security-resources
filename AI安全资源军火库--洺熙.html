@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI安全资源军火库 — 洺熙</title>
+<style>
+:root {
+  --bg: #f6f8fb;
+  --bg-soft: #eef3f8;
+  --panel: #ffffff;
+  --panel-strong: #f8fafc;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --muted-2: #94a3b8;
+  --line: #e2e8f0;
+  --line-strong: #cbd5e1;
+  --navy: #0f172a;
+  --shadow: 0 18px 45px rgba(15, 23, 42, .10);
+  --shadow-soft: 0 10px 28px rgba(15, 23, 42, .08);
+  --m1: #8b5cf6;
+  --m2: #06b6d4;
+  --m3: #ef4444;
+  --m4: #f59e0b;
+  --m5: #10b981;
+  --m6: #3b82f6;
+  --danger: #dc2626;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  display: flex;
+  background:
+    radial-gradient(circle at top left, rgba(139, 92, 246, .14), transparent 32rem),
+    radial-gradient(circle at 85% 0%, rgba(6, 182, 212, .12), transparent 26rem),
+    linear-gradient(180deg, #fbfdff 0%, var(--bg) 48%, #eef2f7 100%);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  line-height: 1.5;
+}
+a { color: inherit; text-decoration: none; }
+a:hover { text-decoration: none; }
+button, input, select { font: inherit; }
+
+aside {
+  width: 300px;
+  min-width: 300px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  padding: 20px 16px;
+  background: rgba(255, 255, 255, .86);
+  border-right: 1px solid rgba(203, 213, 225, .72);
+  backdrop-filter: blur(22px);
+  z-index: 20;
+}
+.aside-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 4px 18px;
+  border-bottom: 1px solid var(--line);
+}
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--navy), #334155 52%, var(--m1));
+  box-shadow: var(--shadow-soft);
+  font-size: 22px;
+}
+.aside-header h2 { font-size: 16px; letter-spacing: .2px; color: var(--ink); }
+.aside-header p { margin-top: 2px; font-size: 12px; color: var(--muted); }
+.aside-meter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 16px 0 14px;
+}
+.aside-meter div {
+  padding: 12px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .04);
+}
+.aside-meter strong { display: block; font-size: 20px; line-height: 1; }
+.aside-meter span { display: block; margin-top: 4px; font-size: 11px; color: var(--muted); }
+.nav-caption {
+  margin: 8px 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--muted-2);
+  text-transform: uppercase;
+}
+.nav-section { margin-bottom: 8px; }
+.nav-section-title {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 10px 10px 12px;
+  border: 1px solid transparent;
+  border-left: 4px solid var(--module-color, var(--navy));
+  border-radius: 14px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all .18s ease;
+  text-align: left;
+}
+.nav-section-title:hover,
+.nav-section-title.active {
+  background: #fff;
+  border-color: var(--line);
+  border-left-color: var(--module-color, var(--navy));
+  box-shadow: 0 8px 22px rgba(15, 23, 42, .06);
+}
+.nav-section-title .label { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.nav-section-title .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--module-color, var(--navy));
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--module-color, var(--navy)) 14%, transparent);
+  flex: 0 0 auto;
+}
+.nav-section-title b { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nav-section-title .count {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--module-color, var(--navy)) 12%, #fff);
+  color: var(--module-color, var(--navy));
+  font-size: 11px;
+  font-weight: 700;
+}
+.nav-categories { display: none; padding: 6px 0 2px 18px; }
+.nav-categories.open { display: block; }
+.nav-cat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0;
+  padding: 7px 10px 7px 16px;
+  border-radius: 12px;
+  border-left: 2px solid transparent;
+  color: var(--muted);
+  font-size: 12px;
+  transition: all .16s ease;
+}
+.nav-cat:hover,
+.nav-cat.active {
+  color: var(--ink);
+  background: #fff;
+  border-left-color: var(--module-color, var(--navy));
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .05);
+}
+.nav-cat em { font-style: normal; font-size: 11px; color: var(--muted-2); }
+.mod-M1 { --module-color: var(--m1); }
+.mod-M2 { --module-color: var(--m2); }
+.mod-M3 { --module-color: var(--m3); }
+.mod-M4 { --module-color: var(--m4); }
+.mod-M5 { --module-color: var(--m5); }
+.mod-M6 { --module-color: var(--m6); }
+
+main { flex: 1; min-width: 0; }
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  padding: 20px 28px 18px;
+  background: rgba(246, 248, 251, .88);
+  border-bottom: 1px solid rgba(203, 213, 225, .72);
+  backdrop-filter: blur(20px);
+}
+.hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-end;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, .06);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.header h1 {
+  font-size: clamp(26px, 3vw, 42px);
+  letter-spacing: -1.2px;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.header .subtitle {
+  max-width: 860px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.hero-note {
+  min-width: 220px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--navy);
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+}
+.hero-note span { display: block; color: #cbd5e1; font-size: 12px; }
+.hero-note strong { display: block; margin-top: 4px; font-size: 18px; }
+.toolbar {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) repeat(3, minmax(130px, 170px)) auto;
+  gap: 10px;
+  margin-top: 18px;
+}
+.search-field,
+.select-field,
+.reset-btn {
+  height: 42px;
+  border-radius: 14px;
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, .92);
+  color: var(--ink);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, .04);
+}
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+}
+.search-field span { color: var(--muted-2); }
+.search-field input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+}
+.search-field input::placeholder { color: var(--muted-2); }
+.select-field { padding: 0 12px; outline: 0; cursor: pointer; }
+.search-field:focus-within,
+.select-field:focus { border-color: #60a5fa; box-shadow: 0 0 0 4px rgba(96, 165, 250, .16); }
+.reset-btn {
+  padding: 0 16px;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--muted);
+  transition: all .16s ease;
+}
+.reset-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+.content { padding: 26px 28px 48px; }
+.dashboard { margin-bottom: 28px; }
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.kpi-card {
+  position: relative;
+  overflow: hidden;
+  padding: 18px;
+  min-height: 126px;
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+}
+.kpi-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5px;
+  background: var(--accent, var(--navy));
+}
+.kpi-value { font-size: 30px; line-height: 1; font-weight: 800; letter-spacing: -1px; color: var(--ink); }
+.kpi-label { margin-top: 10px; color: var(--muted); font-weight: 700; font-size: 13px; }
+.kpi-desc { margin-top: 4px; color: var(--muted-2); font-size: 12px; }
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(360px, 1.3fr) minmax(320px, .7fr);
+  gap: 16px;
+}
+.panel {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .92);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, #fff, #f8fafc);
+}
+.panel-header h2 { font-size: 16px; }
+.panel-header p { margin-top: 2px; color: var(--muted); font-size: 12px; }
+.module-distribution, .importance-distribution { padding: 8px 18px 18px; }
+.dist-row {
+  display: grid;
+  grid-template-columns: 148px 58px 54px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #edf2f7;
+  font-size: 13px;
+}
+.dist-row:last-child { border-bottom: 0; }
+.dist-name { display: flex; align-items: center; gap: 8px; min-width: 0; font-weight: 700; }
+.dist-name .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--module-color, var(--navy)); }
+.dist-name span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.dist-count, .dist-rate { color: var(--muted); text-align: right; }
+.bar-track {
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #edf2f7;
+}
+.bar-fill {
+  width: var(--pct, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--module-color, var(--navy));
+}
+.importance-row {
+  grid-template-columns: 74px 58px 60px 1fr;
+}
+.importance-row .dist-name { color: var(--grade-color); }
+.legend-note {
+  padding: 12px 18px 16px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  background: #fbfdff;
+}
+
+.section { margin-bottom: 30px; scroll-margin-top: 174px; }
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 12px;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--module-color) 14%, #fff), #fff 62%);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--module-color);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+}
+.section-kicker { color: var(--module-color); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.section-title { margin-top: 3px; font-size: 22px; letter-spacing: -.4px; }
+.section-desc { margin-top: 5px; max-width: 840px; color: var(--muted); font-size: 13px; }
+.section-count {
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  border-radius: 14px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--module-color) 18%, var(--line));
+  color: var(--module-color);
+  font-weight: 800;
+}
+.section-count span { display: block; font-size: 11px; color: var(--muted); font-weight: 600; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(255,255,255,.82);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .16s ease;
+  user-select: none;
+}
+.tag:hover, .tag.active {
+  border-color: var(--module-color);
+  color: var(--module-color);
+  background: color-mix(in srgb, var(--module-color) 10%, #fff);
+}
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+.card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 214px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, .94);
+  box-shadow: 0 8px 22px rgba(15, 23, 42, .05);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--module-color), color-mix(in srgb, var(--module-color) 35%, #fff));
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--module-color) 38%, var(--line));
+  box-shadow: var(--shadow);
+}
+.card-header { display: flex; gap: 12px; align-items: flex-start; }
+.seq-badge {
+  flex: 0 0 auto;
+  min-width: 42px;
+  padding: 5px 7px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--module-color) 12%, #fff);
+  color: var(--module-color);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+.card-title-wrap { min-width: 0; }
+.card-title {
+  display: inline;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.35;
+  word-break: break-word;
+}
+.card-title:hover { color: var(--module-color); }
+.card-title .icon { margin-right: 6px; }
+.card-meta { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin-top: 10px; }
+.badge,
+.category-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 23px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  border: 1px solid transparent;
+}
+.badge-S { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+.badge-A { background: #fff7ed; color: #d97706; border-color: #fed7aa; }
+.badge-B { background: #ecfdf5; color: #059669; border-color: #bbf7d0; }
+.badge-C { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+.badge-D { background: #f1f5f9; color: #64748b; border-color: #e2e8f0; }
+.badge-github { background: #f8fafc; color: #0f172a; border-color: #cbd5e1; }
+.badge-paper { background: #f5f3ff; color: #7c3aed; border-color: #ddd6fe; }
+.badge-video { background: #fdf2f8; color: #db2777; border-color: #fbcfe8; }
+.badge-guide { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.badge-blog { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
+.badge-course { background: #ecfdf5; color: #047857; border-color: #bbf7d0; }
+.badge-community { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
+.badge-competition { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+.badge-conference { background: #eef2ff; color: #4338ca; border-color: #c7d2fe; }
+.category-pill { background: #fff; color: var(--muted); border-color: var(--line); }
+.card-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; color: var(--muted); font-size: 12px; }
+.card-stats span { display: inline-flex; align-items: center; gap: 4px; }
+.card-desc {
+  margin-top: 12px;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 14px;
+  color: var(--muted-2);
+  font-size: 12px;
+}
+.domain { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.card-link {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border-radius: 10px;
+  color: #fff;
+  background: var(--module-color);
+  font-weight: 800;
+}
+.card-link:hover { filter: brightness(.94); }
+.no-results {
+  text-align: center;
+  padding: 64px 20px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, .72);
+  color: var(--muted);
+  font-size: 14px;
+}
+.back-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: var(--navy);
+  color: #fff;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  z-index: 40;
+  transition: transform .16s ease, filter .16s ease;
+}
+.back-top:hover { transform: translateY(-2px); filter: brightness(1.08); }
+
+@media (max-width: 1180px) {
+  aside { width: 264px; min-width: 264px; }
+  .toolbar { grid-template-columns: 1fr 1fr 1fr; }
+  .search-field { grid-column: 1 / -1; }
+  .overview-grid { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
+  .dashboard-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 820px) {
+  body { display: block; }
+  aside { display: none; }
+  .header { padding: 18px 16px; }
+  .hero { display: block; }
+  .hero-note { margin-top: 14px; }
+  .toolbar { grid-template-columns: 1fr; }
+  .content { padding: 18px 14px 40px; }
+  .overview-grid { grid-template-columns: 1fr; }
+  .section-head { display: block; }
+  .section-count { margin-top: 12px; display: inline-block; }
+  .cards { grid-template-columns: 1fr; }
+  .dist-row { grid-template-columns: 116px 46px 48px 1fr; gap: 8px; }
+}
+</style>
+</head>
+<body>
+<aside>
+  <div class="aside-header">
+    <div class="brand-mark">🛡️</div>
+    <div>
+      <h2>AI安全资源军火库</h2>
+      <p>v0.1 · 洺熙 · 米斯特AI安全社区</p>
+    </div>
+  </div>
+  <div class="aside-meter">
+    <div><strong id="side-total">0</strong><span>资源总数</span></div>
+    <div><strong id="side-modules">6</strong><span>安全模块</span></div>
+  </div>
+  <div class="nav-caption">Module Navigation</div>
+  <div id="nav-sections"></div>
+</aside>
+<main>
+  <header class="header">
+    <div class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">AI Security Arsenal</div>
+        <h1>AI安全资源军火库 — 洺熙</h1>
+        <div class="subtitle">基于 AI安全六大模块分类体系｜建议作为数据站使用｜来源互联网项目源整理。以参考表的仪表盘与分级配色重构导航体验。</div>
+        <div class="subtitle">公众号：RTAi-Lab 制作</div>
+      </div>
+      <div class="hero-note">
+        <span>参考工作簿更新时间</span>
+        <strong>2026-05-07</strong>
+      </div>
+    </div>
+    <div class="toolbar" aria-label="资源筛选工具栏">
+      <label class="search-field" for="search"><span>🔍</span><input type="search" id="search" placeholder="搜索名称、描述、分类、类型或 URL..." oninput="handleSearch(this.value)"></label>
+      <select id="importance-filter" class="select-field" onchange="setImportanceFilter(this.value)" aria-label="按重要性筛选"></select>
+      <select id="type-filter" class="select-field" onchange="setTypeFilter(this.value)" aria-label="按资源类型筛选"></select>
+      <select id="sort-mode" class="select-field" onchange="setSortMode(this.value)" aria-label="排序方式">
+        <option value="priority">优先级排序</option>
+        <option value="stars">Stars 降序</option>
+        <option value="seq">原始序号</option>
+        <option value="name">名称 A-Z</option>
+      </select>
+      <button class="reset-btn" type="button" onclick="resetFilters()">重置</button>
+    </div>
+  </header>
+  <div class="content">
+    <section class="dashboard" id="dashboard" aria-label="数据概览仪表盘"></section>
+    <div id="content"></div>
+  </div>
+</main>
+<button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部" aria-label="回到顶部">↑</button>
+<script>
+var DATA = [{"id": "M1", "title": "M1  AI Agent 安全", "subtitle": "AI Agent框架安全、运行时安全、MCP协议安全、多Agent协同安全与防护", "items": [{"seq": 69, "name": "0xSteph/pentest-ai-agents", "type": "GitHub仓库", "importance": "A", "stars": "916", "forks": "209", "category": "AI渗透测试", "desc": "将 Claude Code 变成您的进攻性安全研究助手。专门的 AI Sub-Agent，用于授权渗透测试计划、分析侦察、研究漏洞、构建检测、审核 STIG 和编写报告。", "url": "https://github.com/0xSteph/pentest-ai-agents"}, {"seq": 70, "name": "SanMuzZzZz/LuaN1aoAgent", "type": "GitHub仓库", "importance": "A", "stars": "746", "forks": "106", "category": "AI渗透测试", "desc": "LuaN1aoAgent 是一个认知驱动的 AI 黑客。它是由 DeepSeek V3.2 提供支持的完全自主的 AI 渗透测试 Agent。使用双图推理，LuaN1ao 在 XBOW Benchmark 上实现了超过 90% 的成功率，中位利用成本仅为 0.09 美元。", "url": "https://github.com/SanMuzZzZz/LuaN1aoAgent"}, {"seq": 2, "name": "sangrokjung/claude-forge", "type": "GitHub仓库", "importance": "A", "stars": "685", "forks": "149", "category": "AI Agent框架安全", "desc": "使用 11 个 AI Agent、36 个命令和 15 种技能为 Claude Code 提供增压 — 受 oh-my-zsh 启发的 claude-code 插件框架。包括 6 层安全 Hook。 5 分钟安装。", "url": "https://github.com/sangrokjung/claude-forge"}, {"seq": 3, "name": "slowmist/slowmist-agent-security", "type": "GitHub仓库", "importance": "A", "stars": "445", "forks": "28", "category": "AI Agent框架安全", "desc": "SlowMist Agent 安全技能：针对在对抗环境中运行的 AI Agent 的全面安全审查框架。核心原则：每个外部输入在经过验证之前都是不可信的。", "url": "https://github.com/slowmist/slowmist-agent-security"}, {"seq": 71, "name": "SHAdd0WTAka/Zen-Ai-Pentest", "type": "GitHub仓库", "importance": "A", "stars": "363", "forks": "61", "category": "AI渗透测试", "desc": "🛡⚔️AI 驱动的渗透测试框架，具有自动漏洞扫描、Multi-Agent 系统和合规性报告🛡⚔️", "url": "https://github.com/SHAdd0WTAka/Zen-Ai-Pentest"}, {"seq": 4, "name": "safe-agentic-framework/safe-mcp", "type": "GitHub仓库", "importance": "A", "stars": "337", "forks": "91", "category": "AI Agent框架安全", "desc": "SAFE-MCP 是一个全面的安全框架，用于记录和减轻 AI Agent 生态系统中的威胁。", "url": "https://github.com/safe-agentic-framework/safe-mcp"}, {"seq": 30, "name": "getagentseal/agentseal", "type": "GitHub仓库", "importance": "A", "stars": "239", "forks": "36", "category": "AI Agent安全", "desc": "AI Agent 的安全工具包。扫描本机是否存在危险 Skill 和 MCP 配置，监控供应链攻击，测试 Prompt 注入抵抗能力，并审核实时 MCP Server 是否存在 Tool Poisoning。", "url": "https://github.com/getagentseal/agentseal"}, {"seq": 72, "name": "transilienceai/communitytools", "type": "GitHub仓库", "importance": "A", "stars": "235", "forks": "44", "category": "AI渗透测试", "desc": "开源 Claude Code Skill、Agent 和 Slash Command，用于 AI 驱动的渗透测试、Bug Bounty Hunting 和安全研究", "url": "https://github.com/transilienceai/communitytools"}, {"seq": 5, "name": "yohannesgk/blacksmith", "type": "GitHub仓库", "importance": "A", "stars": "204", "forks": "36", "category": "AI Agent框架安全", "desc": "BlacksmithAI 是一个开源的高级渗透测试框架，利用多个 AI Agent 自动自动执行安全评估。该系统在整个渗透测试生命周期中协调专业 Agent，从侦察到在受控环境中使用专业安全工具进行后利用。", "url": "https://github.com/yohannesgk/blacksmith"}, {"seq": 32, "name": "forefy/.context", "type": "GitHub仓库", "importance": "B", "stars": "98", "forks": "16", "category": "AI Agent安全", "desc": "用于智能合约审计的 AI Agent Skill，可生成分类的行业级报告结果、代码位置、POC、攻击者故事流程图等", "url": "https://github.com/forefy/.context"}, {"seq": 33, "name": "x-zheng16/Awesome-Embodied-AI-Safety", "type": "GitHub仓库", "importance": "B", "stars": "74", "forks": "", "category": "AI Agent安全", "desc": "嵌入式 AI 的安全：风险、攻击和防御调查 | 400 多篇论文 |感知、认知、规划、交互、Agent 系统", "url": "https://github.com/x-zheng16/Awesome-Embodied-AI-Safety"}, {"seq": 6, "name": "iamsonal/aiAgentStudio", "type": "GitHub仓库", "importance": "B", "stars": "72", "forks": "31", "category": "AI Agent框架安全", "desc": "用于在 Salesforce 中构建 AI Agent 的开源框架，具有内置内存、工具和安全性", "url": "https://github.com/iamsonal/aiAgentStudio"}, {"seq": 171, "name": "XiaoYiWeio/deepsafe-scan", "type": "GitHub仓库", "importance": "B", "stars": "69", "forks": "9", "category": "模型植入后门", "desc": "适用于 AI 编码 Agent 的通用预检安全扫描器 — 检测 .cursorrules、CLAUDE.md、AGENTS.md 等中的 Hook 注入、凭证泄露和后门。", "url": "https://github.com/XiaoYiWeio/deepsafe-scan"}, {"seq": 7, "name": "kajogo777/the-agent-sandbox-taxonomy", "type": "GitHub仓库", "importance": "B", "stars": "66", "forks": "6", "category": "AI Agent框架安全", "desc": "用于评估 AI Agent 沙箱的开放分类和评分框架：7 个防御层、7 个威胁类别、3 个评估维度、27 个“沙箱”评分。", "url": "https://github.com/kajogo777/the-agent-sandbox-taxonomy"}, {"seq": 74, "name": "Houseofmvps/ultraship", "type": "GitHub仓库", "importance": "B", "stars": "63", "forks": "7", "category": "AI渗透测试", "desc": "“ULTRASHIP”Claude Code 插件 — 39 种技能、33 种工具、11 种用于交付就绪工作流程的 Agent：规划、审查、渗透测试、安全 Guardrail、金丝雀监控、SEO/AI 就绪检查、渗透测试、代码审查、竞争分析、事件响应。 1 依赖。 180 次测试。麻省理工学院。", "url": "https://github.com/Houseofmvps/ultraship"}, {"seq": 195, "name": "cybozu/prompt-hardener", "type": "GitHub仓库", "importance": "B", "stars": "51", "forks": "7", "category": "LLM应用安全", "desc": "Prompt Hardener 分析基于 LLM 的 Agent 和应用程序中因 Prompt 注入而产生的风险。", "url": "https://github.com/cybozu/prompt-hardener"}, {"seq": 8, "name": "guard0-ai/g0", "type": "GitHub仓库", "importance": "B", "stars": "46", "forks": "6", "category": "AI Agent框架安全", "desc": "AI Agent 的控制层。 1,200 多个规则、12 个域、10 个框架、4,000 多个对抗 payload。发现。评估。测试。监视器。遵守。", "url": "https://github.com/guard0-ai/g0"}, {"seq": 34, "name": "ASCIT31/Dark-Moon", "type": "GitHub仓库", "importance": "B", "stars": "46", "forks": "10", "category": "AI Agent安全", "desc": "自主 AI 渗透测试引擎跨 Web、云、AD 和 Kubernetes 执行持续的攻击性安全。使用 Agentic 推理、真实漏洞执行和攻击路径分析来提供基于证据的漏洞。", "url": "https://github.com/ASCIT31/Dark-Moon"}, {"seq": 9, "name": "inkog-io/inkog", "type": "GitHub仓库", "importance": "B", "stars": "30", "forks": "6", "category": "AI Agent框架安全", "desc": "AI Agent 的静态安全扫描器。发现 21 个框架中的 Prompt 注入、失控循环、监督缺失和合规性差距。从 Claude Code、Cursor、ChatGPT (MCP)、CLI 或 GitHub Actions 中使用。", "url": "https://github.com/inkog-io/inkog"}, {"seq": 136, "name": "VetCoders/mcp-server-semgrep", "type": "GitHub仓库", "importance": "B", "stars": "28", "forks": "11", "category": "AI模型安全", "desc": "MCP Server Semgrep 是一款符合 [模型上下文协议](https://modelcontextprotocol.io) 的服务器，它将强大的 Semgrep 静态分析工具与 Anthropic Claude 等 AI 助手集成在一起。它可以直接通过对话界面进行高级代码分析、安全漏洞检测和代码质量改进。", "url": "https://github.com/VetCoders/mcp-server-semgrep"}, {"seq": 259, "name": "benchjack/benchjack", "type": "GitHub仓库", "importance": "B", "stars": "28", "forks": "4", "category": "AI黑客工具", "desc": "AI Agent 基准可破解性扫描仪 — 在评估漏洞破坏您的结果之前找到它们", "url": "https://github.com/benchjack/benchjack"}, {"seq": 35, "name": "UPinar/contrastapi", "type": "GitHub仓库", "importance": "B", "stars": "22", "forks": "3", "category": "AI Agent安全", "desc": "用于 AI Agent 的安全情报 MCP Server — 42 种工具：CVE/KEV/CWE、域审计、IOC/威胁情报、MITRE ATLAS（AI/ML 攻击）+ 批量技术演练、MITRE D3FEND（防御）。免费套餐，无 API 密钥。", "url": "https://github.com/UPinar/contrastapi"}, {"seq": 76, "name": "zebbern/zebbern-kali-mcp", "type": "GitHub仓库", "importance": "B", "stars": "22", "forks": "6", "category": "AI渗透测试", "desc": "用于 Kali Linux 渗透测试的 MCP Server - 130 个用于 AI 辅助安全测试的工具 - 使 Agent 能够访问完整的渗透测试工具", "url": "https://github.com/zebbern/zebbern-kali-mcp"}, {"seq": 36, "name": "FastBuilderAI/safesemantics", "type": "GitHub仓库", "importance": "B", "stars": "20", "forks": "5", "category": "AI Agent安全", "desc": "SafeSemantics 是 AI 应用程序和 Agent 的拓扑 Guardrail。只需即插即用 AI 安全层，即可利用高级知识库了解所有攻击者如何通过查询和 Prompt渗透和窃取信息", "url": "https://github.com/FastBuilderAI/safesemantics"}, {"seq": 10, "name": "qualixar/skillfortify", "type": "GitHub仓库", "importance": "B", "stars": "19", "forks": "1", "category": "AI Agent框架安全", "desc": "第一个针对 AI Agent Skill 和插件的正式安全扫描器。静态分析、供应链验证、SBOM 生成。支持 MCP、LangChain、CrewAI 等 22个框架。", "url": "https://github.com/qualixar/skillfortify"}, {"seq": 37, "name": "sundi133/wb-red-team", "type": "GitHub仓库", "importance": "B", "stars": "19", "forks": "10", "category": "AI Agent安全", "desc": "用于 Agentic AI 应用程序的白盒和黑盒红队框架。它分析应用程序的源代码以发现工具、角色和 Guardrail，然后生成跨多个类别的新攻击链，并适应多个多回合以查找漏洞", "url": "https://github.com/sundi133/wb-red-team"}, {"seq": 38, "name": "Alibaba-AAIG/ClawArmor", "type": "GitHub仓库", "importance": "B", "stars": "18", "forks": "3", "category": "AI Agent安全", "desc": "AI Agent 的自我进化防御 - 通过自适应安全性防止 Prompt 注入、数据泄露和多阶段攻击。", "url": "https://github.com/Alibaba-AAIG/ClawArmor"}, {"seq": 39, "name": "raiph-ai/fireclaw", "type": "GitHub仓库", "importance": "B", "stars": "17", "forks": "1", "category": "AI Agent安全", "desc": "🛡️ Agent 大脑的防火墙。开源安全 Agent，可保护 AI Agent 免受 Prompt 注入攻击。 4 级管道、社区威胁源、无旁路模式。", "url": "https://github.com/raiph-ai/fireclaw"}, {"seq": 11, "name": "webpro255/agentlock", "type": "GitHub仓库", "importance": "B", "stars": "16", "forks": "4", "category": "AI Agent框架安全", "desc": "AI Agent 的开放授权标准。适用于任何 AI Agent 的与框架无关的工具权限、身份验证、范围访问控制和审核日志记录。", "url": "https://github.com/webpro255/agentlock"}, {"seq": 40, "name": "lulbitz/llm-con", "type": "GitHub仓库", "importance": "B", "stars": "16", "forks": "1", "category": "AI Agent安全", "desc": "LLM 安全评估框架。 AI/LLM 端点的自动侦察、指纹识别和攻击模拟。发现聊天端点、识别模型系列、提取System Prompt、测试越狱、绕过 Guardrail，以及从 Agent、RAG 管道和 Multi-Agent 系统中窃取敏感数据。", "url": "https://github.com/lulbitz/llm-con"}, {"seq": 12, "name": "Rose22/openlumara", "type": "GitHub仓库", "importance": "B", "stars": "15", "forks": "2", "category": "AI Agent框架安全", "desc": "AI Agent 框架是从头开始编写的（不是基于 openclaw），专注于将其精简为最基本的必需品，优化 token 计数，降低安全风险。模块化，因此您可以仅启用您需要的功能。", "url": "https://github.com/Rose22/openlumara"}, {"seq": 41, "name": "ThirdKeyAI/SchemaPin", "type": "GitHub仓库", "importance": "B", "stars": "15", "forks": "6", "category": "AI Agent安全", "desc": "SchemaPin 协议用于对 AI Agent 工具模式进行加密签名和验证，以防止供应链攻击。", "url": "https://github.com/ThirdKeyAI/SchemaPin"}, {"seq": 42, "name": "chenglin1112/AgentTrust", "type": "GitHub仓库", "importance": "B", "stars": "15", "forks": "3", "category": "AI Agent安全", "desc": "AI Agent 的实时可信度评估和安全拦截。语义分析、安全替代建议、多步骤攻击链检测和 LLM-as-Judge。", "url": "https://github.com/chenglin1112/AgentTrust"}, {"seq": 43, "name": "stratosphereips/aracne", "type": "GitHub仓库", "importance": "B", "stars": "13", "forks": "4", "category": "AI Agent安全", "desc": "100% 自主的 AI Agent，可对 SSH 连接进行攻击、防御、管理和操作", "url": "https://github.com/stratosphereips/aracne"}, {"seq": 44, "name": "webpro255/awesome-ai-agent-attacks", "type": "GitHub仓库", "importance": "B", "stars": "13", "forks": "2", "category": "AI Agent安全", "desc": "真实 AI Agent 安全事件、违规行为和漏洞的精选时间表（2024-2026 年）。每个条目的来源和日期。", "url": "https://github.com/webpro255/awesome-ai-agent-attacks"}, {"seq": 77, "name": "exjskdjsdfks/pentest-mcp-server", "type": "GitHub仓库", "importance": "B", "stars": "13", "forks": "2", "category": "AI渗透测试", "desc": "⚙️ 使 AI Agent 能够使用持久且强大的模型上下文协议服务器在任何 Linux 发行版上进行自主渗透测试。", "url": "https://github.com/exjskdjsdfks/pentest-mcp-server"}, {"seq": 45, "name": "yeyintminthuhtut/awesome-ai-offensive-security", "type": "GitHub仓库", "importance": "B", "stars": "12", "forks": "1", "category": "AI Agent安全", "desc": "专门为 AI 驱动的攻击性安全而设计的出色 AI Agent 和工具的精选列表，以及用于攻击 AI 系统的工具。", "url": "https://github.com/yeyintminthuhtut/awesome-ai-offensive-security"}, {"seq": 46, "name": "makash/agent-infra-security", "type": "GitHub仓库", "importance": "B", "stars": "11", "forks": "2", "category": "AI Agent安全", "desc": "AI Coding Agent 的安全 Skill——供应链攻击的事件响应、凭证轮换、IOC 检测。可与 Claude Code、Codex、Cursor 配合使用，或作为独立脚本和 Runbook。", "url": "https://github.com/makash/agent-infra-security"}, {"seq": 13, "name": "xynehq/jaf", "type": "GitHub仓库", "importance": "B", "stars": "10", "forks": "6", "category": "AI Agent框架安全", "desc": "一个基于不可变状态、类型安全和可组合策略构建的纯功能 Agent 框架。 JAF 支持构建具有内置安全性、可观察性和错误处理功能的生产就绪型 AI Agent 系统。", "url": "https://github.com/xynehq/jaf"}, {"seq": 14, "name": "openparallax/openparallax", "type": "GitHub仓库", "importance": "B", "stars": "10", "forks": "2", "category": "AI Agent框架安全", "desc": "会思考的 AI Agent 永远不会采取行动。具有可组合模块的开源安全框架，用于安全自主 AI。", "url": "https://github.com/openparallax/openparallax"}, {"seq": 47, "name": "safe-agentic-framework/safe-agentic-use-cases", "type": "GitHub仓库", "importance": "B", "stars": "10", "forks": "11", "category": "AI Agent安全", "desc": "社区驱动的行业存储库和 Agent 系统用例分析。记录 AI Agent 如何失败，以及这些失败如何映射到 SAFE-MCP 攻击技术。", "url": "https://github.com/safe-agentic-framework/safe-agentic-use-cases"}, {"seq": 15, "name": "GenAI-Security-Project/GenAI-Agent-Security-Initiative", "type": "GitHub仓库", "importance": "C", "stars": "9", "forks": "8", "category": "AI Agent框架安全", "desc": "此存储库包含常见 Agent 框架中不安全代码和/或安全错误配置的示例", "url": "https://github.com/GenAI-Security-Project/GenAI-Agent-Security-Initiative"}, {"seq": 16, "name": "leopechnicki/im_robot", "type": "GitHub仓库", "importance": "C", "stars": "9", "forks": "", "category": "AI Agent框架安全", "desc": "AI Agent 的反向验证码 — 验证机器人，而不是人类。多框架（React、Vue、Svelte、Web 组件）。零依赖。TypeScript。", "url": "https://github.com/leopechnicki/im_robot"}, {"seq": 17, "name": "huzaifa1-0/AI-Github-Auditor", "type": "GitHub仓库", "importance": "C", "stars": "8", "forks": "2", "category": "AI Agent框架安全", "desc": "功能强大的 AI Agent，可审核您的 GitHub 存储库、检测安全和质量问题、跟踪项目进度并提供 GPT 支持的见解 - 所有这些都在模块化、可扩展的框架中。", "url": "https://github.com/huzaifa1-0/AI-Github-Auditor"}, {"seq": 78, "name": "wudidike/pentest_skill", "type": "GitHub仓库", "importance": "C", "stars": "8", "forks": "1", "category": "AI渗透测试", "desc": "用于 AI Agent 的黑盒 Web 渗透测试自动化框架", "url": "https://github.com/wudidike/pentest_skill"}, {"seq": 18, "name": "hleliofficiel/ExaAiAgent", "type": "GitHub仓库", "importance": "C", "stars": "7", "forks": "1", "category": "AI Agent框架安全", "desc": "ExaAiAgent — 先进的 AI 驱动的渗透测试框架，具有 Docker 沙箱、Multi-Agent 工作流程和 50 多个集成网络安全工具。", "url": "https://github.com/hleliofficiel/ExaAiAgent"}, {"seq": 19, "name": "TokioAI/tokioai-v1.8", "type": "GitHub仓库", "importance": "C", "stars": "6", "forks": "2", "category": "AI Agent框架安全", "desc": "自主 AI Agent 框架 — 将 Claude、GPT 或 Gemini 连接到您的基础设施。 30 多种工具：服务器、Docker、数据库、物联网、无人机、WAF、云。三个接口：CLI、REST API、Telegram Bot。自托管，安全第一。", "url": "https://github.com/TokioAI/tokioai-v1.8"}, {"seq": 48, "name": "radanliev/Agentic-AI-Security-Demos", "type": "GitHub仓库", "importance": "C", "stars": "6", "forks": "10", "category": "AI Agent安全", "desc": "Agentic AI Security Bootcamp 是一个以研究为导向的实践培训环境，用于分析、攻击和保护自主 AI 系统。该存储库提供结构化实验室、对抗性评估框架和涵盖 Multi-Agent 可观察性、Prompt 注入的红队练习。", "url": "https://github.com/radanliev/Agentic-AI-Security-Demos"}, {"seq": 49, "name": "secwexen/aapp-mart", "type": "GitHub仓库", "importance": "C", "stars": "6", "forks": "3", "category": "AI Agent安全", "desc": "AAPP‑MART 是一款 AI 自主攻击路径预测和 Multi-Agent 红队模拟引擎，专为攻击模拟、自动威胁建模、对手模拟以及与 MITRE ATT&amp;CK 一致的企业级网络安全验证而设计。", "url": "https://github.com/secwexen/aapp-mart"}, {"seq": 80, "name": "IntegSec/agentic-pentest-proxy", "type": "GitHub仓库", "importance": "C", "stars": "6", "forks": "1", "category": "AI渗透测试", "desc": "MCP Scope Enforcement Proxy - 使用 MCP Server 为 AI Agent 强制执行渗透测试参与范围的中间件。", "url": "https://github.com/IntegSec/agentic-pentest-proxy"}, {"seq": 138, "name": "Sengtocxoen/sast-mcp", "type": "GitHub仓库", "importance": "C", "stars": "6", "forks": "1", "category": "AI模型安全", "desc": "全面的**模型上下文协议 (MCP)** 服务器，将多个 SAST（静态应用程序安全测试）工具与 Claude Code AI 集成，可直接从 AI 助手进行自动安全分析和漏洞扫描。", "url": "https://github.com/Sengtocxoen/sast-mcp"}, {"seq": 50, "name": "ssp2x/Multi-Agent-AI-Attack-Chain", "type": "GitHub仓库", "importance": "C", "stars": "5", "forks": "", "category": "AI Agent安全", "desc": "", "url": "https://github.com/ssp2x/Multi-Agent-AI-Attack-Chain"}, {"seq": 51, "name": "AgentSafety/ClawCare", "type": "GitHub仓库", "importance": "C", "stars": "5", "forks": "", "category": "AI Agent安全", "desc": "针对 AI Agent Skill 和插件的安全扫描器 — 在恶意攻击执行之前将其捕获。", "url": "https://github.com/AgentSafety/ClawCare"}, {"seq": 52, "name": "holmanholdings/lionguard", "type": "GitHub仓库", "importance": "C", "stars": "5", "forks": "", "category": "AI Agent安全", "desc": "AI Agent 的大教堂级安全性。攻击向量每天更新。本地优先，零 API 成本。麻省理工学院许可。", "url": "https://github.com/holmanholdings/lionguard"}, {"seq": 53, "name": "CaseyLabs/kc-secure-repo-template", "type": "GitHub仓库", "importance": "C", "stars": "5", "forks": "", "category": "AI Agent安全", "desc": "安全强化的 GitHub 存储库模板，旨在防止供应链攻击。包括漏洞扫描和 AI Agent Skill。", "url": "https://github.com/CaseyLabs/kc-secure-repo-template"}, {"seq": 54, "name": "clay-good/proxilion-mcp", "type": "GitHub仓库", "importance": "C", "stars": "5", "forks": "3", "category": "AI Agent安全", "desc": "Proxilion MCP 安全网关是一款自托管、Docker 就绪的安全网关，通过分析 Copilot 和 Claude Code 等助手的工具调用，针对内部威胁、受损帐户和流氓 AI Agent 提供实时威胁检测（&lt;50 毫秒 P95 延迟），实现对复杂攻击的 75-85% 检测率。", "url": "https://github.com/clay-good/proxilion-mcp"}, {"seq": 82, "name": "x-glacier/kali-pentest", "type": "GitHub仓库", "importance": "C", "stars": "5", "forks": "3", "category": "AI渗透测试", "desc": "通过 Kali Linux 进行自主渗透测试的 AI Agent Skill — 199 个 CLI 工具、15 个场景剧本、通过 SSH 或 Docker 的深度强制工作流程。与 Claude Code、OpenClaw 和 Hermes Agent 配合使用。", "url": "https://github.com/x-glacier/kali-pentest"}, {"seq": 83, "name": "leminhthanh1998/DuckPentest-Project", "type": "GitHub仓库", "importance": "C", "stars": "5", "forks": "1", "category": "AI渗透测试", "desc": "AI 驱动的渗透测试 Agent！", "url": "https://github.com/leminhthanh1998/DuckPentest-Project"}, {"seq": 139, "name": "r00tkit77/cmdb_nvd_mcp_server", "type": "GitHub仓库", "importance": "C", "stars": "5", "forks": "1", "category": "AI模型安全", "desc": "模型上下文协议 (MCP) 服务器，用于通过 Agentic AI 实现漏洞智能自动化。该系统将配置管理数据库 (CMDB) 与 NIST NVD 的实时 CVE 摄取相结合，并利用 LLM 驱动的推理进行漏洞关联。", "url": "https://github.com/r00tkit77/cmdb_nvd_mcp_server"}, {"seq": 140, "name": "RandomSynergy17/Arcane-MCP-Server", "type": "GitHub仓库", "importance": "C", "stars": "5", "forks": "", "category": "AI模型安全", "desc": "一个全面的模型上下文协议服务器，向 Claude 等 AI 助手公开 Arcane Docker 管理 API。超过 165 个工具，涵盖容器、图像、卷、网络、Docker Compose 堆栈、Swarm 集群、漏洞扫描、GitOps 等。", "url": "https://github.com/RandomSynergy17/Arcane-MCP-Server"}, {"seq": 20, "name": "tonitangpotato/rustclaw", "type": "GitHub仓库", "importance": "C", "stars": "4", "forks": "1", "category": "AI Agent框架安全", "desc": "Rust 原生 AI Agent 框架，具有认知记忆 (Engram)、Multi-Agent 编排和安全第一设计。单个二进制，&lt;100ms 启动，~5ms 内存调用。", "url": "https://github.com/tonitangpotato/rustclaw"}, {"seq": 55, "name": "LLMSecurity/awesome-agent-skills-security", "type": "GitHub仓库", "importance": "C", "stars": "4", "forks": "3", "category": "AI Agent安全", "desc": "🛡️ 有关 Agent Skill 安全的精选资源列表：用于保护 AI Agent 工具使用和技能生态系统的攻击、防御、框架和基准", "url": "https://github.com/LLMSecurity/awesome-agent-skills-security"}, {"seq": 84, "name": "Xyeino/ziro", "type": "GitHub仓库", "importance": "C", "stars": "4", "forks": "1", "category": "AI渗透测试", "desc": "AI 驱动的渗透测试 Agent", "url": "https://github.com/Xyeino/ziro"}, {"seq": 56, "name": "thekie/read-no-evil-mcp", "type": "GitHub仓库", "importance": "C", "stars": "3", "forks": "3", "category": "AI Agent安全", "desc": "安全电子邮件网关 MCP Server，可保护 AI Agent 免受隐藏在电子邮件中的 Prompt 注入攻击。", "url": "https://github.com/thekie/read-no-evil-mcp"}, {"seq": 57, "name": "XiaoYiWeio/ai-agent-attack-techniques", "type": "GitHub仓库", "importance": "C", "stars": "3", "forks": "", "category": "AI Agent安全", "desc": "针对 AI Coding Agent（Claude Code、Cursor、OpenClaw、Windsurf、Codex）的现实世界攻击、漏洞和技术的精选列表", "url": "https://github.com/XiaoYiWeio/ai-agent-attack-techniques"}, {"seq": 58, "name": "Xinhao-Deng/awesome-self-evolving-agent-security", "type": "GitHub仓库", "importance": "C", "stars": "3", "forks": "", "category": "AI Agent安全", "desc": "针对自我进化 AI Agent 的论文、基准测试、攻击、防御和安全分析的精选列表。", "url": "https://github.com/Xinhao-Deng/awesome-self-evolving-agent-security"}, {"seq": 59, "name": "eltociear/skill-audit-mcp", "type": "GitHub仓库", "importance": "C", "stars": "3", "forks": "", "category": "AI Agent安全", "desc": "GitHub Action + CLI 用于检测 MCP Server、AI Agent Skill 和插件中的恶意模式。 68+ 攻击特征。", "url": "https://github.com/eltociear/skill-audit-mcp"}, {"seq": 85, "name": "ptkvaibhav/clinkz", "type": "GitHub仓库", "importance": "C", "stars": "3", "forks": "2", "category": "AI渗透测试", "desc": "由 Multi-Agent LLM 编排和 MITRE ATT&amp;CK 和 OWASP WSTG 方法提供支持的自主 AI 驱动渗透测试系统", "url": "https://github.com/ptkvaibhav/clinkz"}, {"seq": 143, "name": "offensiveai26/DVAI", "type": "GitHub仓库", "importance": "C", "stars": "3", "forks": "2", "category": "AI模型安全", "desc": "Damn Vulnerable AI - 实用的 AI 安全培训平台。涵盖 OWASP LLM 前 10 名全部 12 个类别的各种挑战。Prompt 注入、对抗性 ML、RAG 攻击、模型供应链、Agentic AI 开发等。 100% 离线工作。", "url": "https://github.com/offensiveai26/DVAI"}, {"seq": 21, "name": "ksrpatil/sentinelagent", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "AI Agent框架安全", "desc": "联邦行动中自主 AI Agent 系统的零信任安全框架", "url": "https://github.com/ksrpatil/sentinelagent"}, {"seq": 22, "name": "atensecurity/thoth-go", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "AI Agent框架安全", "desc": "用于 Thoth AI Agent 治理框架的 Go SDK", "url": "https://github.com/atensecurity/thoth-go"}, {"seq": 60, "name": "luckyPipewrench/agent-egress-bench", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "AI Agent安全", "desc": "用于 AI Agent 出口安全的工具中立攻击语料库", "url": "https://github.com/luckyPipewrench/agent-egress-bench"}, {"seq": 61, "name": "onlooker89757/awesome-agent-security", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "AI Agent安全", "desc": "1,799 篇 AI Agent 安全论文按质量排名——攻击、防御、评估和架构 |Agent 安全论文精选", "url": "https://github.com/onlooker89757/awesome-agent-security"}, {"seq": 62, "name": "kosiorkosa47/honeymcp", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "2", "category": "AI Agent安全", "desc": "用于 MCP（模型上下文协议）服务器的开源蜜罐。收集针对 AI Agent 生态系统的攻击的威胁情报。", "url": "https://github.com/kosiorkosa47/honeymcp"}, {"seq": 88, "name": "CyberWardion/ai-pentest-agent", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "1", "category": "AI渗透测试", "desc": "AI 驱动的自动化渗透测试 Agent。使用 Claude AI 和 Tor 路由查找并利用 Web 应用程序、WordPress 和 REST API 中的漏洞。", "url": "https://github.com/CyberWardion/ai-pentest-agent"}, {"seq": 106, "name": "Ismail-2001/agent-adversarial-tester", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "AI红队攻防", "desc": "高性能安全编排引擎，旨在在 AI Agent 投入生产之前对它们进行红队处理。除了简单的测试之外，我们还提供 AI 驱动的攻击演变和映射到全球安全基准的高保真判断。", "url": "https://github.com/Ismail-2001/agent-adversarial-tester"}, {"seq": 108, "name": "RELIAX1212221/RedTeam-MCP", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "1", "category": "AI红队攻防", "desc": "通过使用 AI 计划攻击、运行安全工具、横向移动以及提升网络环境中的权限，实现红队自动化。", "url": "https://github.com/RELIAX1212221/RedTeam-MCP"}, {"seq": 144, "name": "dynatrace-wwse/demo-mcp-unguard", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "1", "category": "AI模型安全", "desc": "本实践教程展示了模型上下文协议 (MCP) 与 AI Agent 相结合的强大功能，可以分析、检测和修复现实应用程序中的安全漏洞。", "url": "https://github.com/dynatrace-wwse/demo-mcp-unguard"}, {"seq": 63, "name": "ItsNishi/AI-Agent-Security", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI Agent安全", "desc": "AI Coding Agent 攻击面的教育安全研究——Prompt 注入、Skill Poisoning、防御模式", "url": "https://github.com/ItsNishi/AI-Agent-Security"}, {"seq": 91, "name": "NoamAmar07/pentest-ai-agent", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI渗透测试", "desc": "AI 驱动的渗透测试实验室——Kali Linux、Metasploit、LangChain、Ollama", "url": "https://github.com/NoamAmar07/pentest-ai-agent"}, {"seq": 113, "name": "sabrinahaniff/llm-redteam-lab", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI红队攻防", "desc": "具有 4 个 AI Agent 的自动化 LLM 红队系统 - 在有或没有 Guardrail 防御的情况下测试 Prompt 注入攻击", "url": "https://github.com/sabrinahaniff/llm-redteam-lab"}, {"seq": 148, "name": "Stacksheild/sentinelai", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "2", "category": "AI模型安全", "desc": "AI 生态系统的安全扫描器、成本跟踪器和模型路由器。扫描 Claude Code 技能、MCP Server 和 LLM 插件是否存在漏洞。跟踪和预测跨提供商的 LLM API 支出。根据任务类型、成本和延迟获取智能模型建议。 CLI 优先，开源。", "url": "https://github.com/Stacksheild/sentinelai"}, {"seq": 152, "name": "aleph-beth/AI-Watchtower", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI模型安全", "desc": "AI 安全研究博客：Prompt 注入、MCP 漏洞、Agent 威胁模型以及基于 LLM 的系统的强化手册。", "url": "https://github.com/aleph-beth/AI-Watchtower"}, {"seq": 153, "name": "ferranverdes/toolkit", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI模型安全", "desc": "AI 安全测试和渗透测试的实用工具，专注于评估模型稳健性、Prompt 注入风险、越狱抵抗、数据泄露、Agent 安全和 LLM 应用漏洞。", "url": "https://github.com/ferranverdes/toolkit"}, {"seq": 177, "name": "themahipalt/PRobe", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "模型植入后门", "desc": "PRObe - 强化学习环境，训练 AI Agent 像安全工程师一样调查代码：发现错误、发现故意后门，并决定何时升级。没有 LLM 评判，完全确定性奖励。", "url": "https://github.com/themahipalt/PRobe"}, {"seq": 178, "name": "Ken71214/ghost", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "1", "category": "模型植入后门", "desc": "将 git 提交转换为 AI 生成的code prompt，捕获意图和输出，以便使用多个 AI Agent 实现更清晰、可重现的项目历史记录。", "url": "https://github.com/Ken71214/ghost"}, {"seq": 199, "name": "stef41/injectionguard", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "LLM应用安全", "desc": "LLM 应用程序和 MCP Server 的 Prompt 注入检测。检测越狱、instruction override、编码攻击。 OWASP LLM #1 辩护。", "url": "https://github.com/stef41/injectionguard"}, {"seq": 201, "name": "hawonb711-tech/promptguard", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "LLM应用安全", "desc": "针对 LLM 应用程序和 AI Agent 的快速、零依赖 Prompt 注入检测", "url": "https://github.com/hawonb711-tech/promptguard"}, {"seq": 235, "name": "arishtanemi3007/contract-bot", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI信息泄漏", "desc": "隐私第一、完全本地化的 Agentic AI 法律助理。通过 Telegram 结合多模式 RAG (DeepSeek-R1 + Llama 3.2 Vision) 进行零数据泄漏合约分析。", "url": "https://github.com/arishtanemi3007/contract-bot"}, {"seq": 23, "name": "azizkastalli/Contained", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI Agent框架安全", "desc": "AI-Agent 安全框架", "url": "https://github.com/azizkastalli/Contained"}, {"seq": 24, "name": "vineeth0216/alpenguard-security-framework", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI Agent框架安全", "desc": "提供零信任安全性和合规性中间件，旨在保护企业环境中的自主 AI Agent。", "url": "https://github.com/vineeth0216/alpenguard-security-framework"}, {"seq": 25, "name": "HueCodes/Moat", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI Agent框架安全", "desc": "AI Agent 框架的安全运行时", "url": "https://github.com/HueCodes/Moat"}, {"seq": 26, "name": "CODINGIDK11/langchain-agent-pay", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI Agent框架安全", "desc": "💰 通过 LangChain ZendFi 在 Solana 上实现自主加密货币支付，确保 AI Agent 的安全和费用管理。", "url": "https://github.com/CODINGIDK11/langchain-agent-pay"}, {"seq": 27, "name": "zliu666/OpenCortex", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI Agent框架安全", "desc": "模块化 AI Agent 框架 — OpenHarness + AgentSys Security + Hermes 增强版", "url": "https://github.com/zliu666/OpenCortex"}, {"seq": 28, "name": "DanstheMan1981/ZeroCool", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI Agent框架安全", "desc": "AI Agent 的零基础设施持久知识和安全框架。", "url": "https://github.com/DanstheMan1981/ZeroCool"}, {"seq": 64, "name": "languagezoneenterprise545/awesome-ai-agent-incidents", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI Agent安全", "desc": "编录真实世界的 AI Agent 事件、攻击技术、CVE 和防御工具，以实现安全的自主 Agent 防御", "url": "https://github.com/languagezoneenterprise545/awesome-ai-agent-incidents"}, {"seq": 65, "name": "AndrewSispoidis/contemporary-agent-attacks", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI Agent安全", "desc": "针对自主 AI Agent 的开放攻击语料库。AI 安全工具的可重复基准测试。", "url": "https://github.com/AndrewSispoidis/contemporary-agent-attacks"}, {"seq": 66, "name": "phoenix-assistant/ai-agent-security-testing", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI Agent安全", "desc": "AI Agent 安全测试框架 — 具有自动攻击场景的红队 AI Agent", "url": "https://github.com/phoenix-assistant/ai-agent-security-testing"}, {"seq": 92, "name": "DillonRich/AI_Pentest_Strix-LLM", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI渗透测试", "desc": "描述我为创建完全自主的 Agentic AI 渗透测试工具所做的努力。", "url": "https://github.com/DillonRich/AI_Pentest_Strix-LLM"}, {"seq": 93, "name": "surya4682/AI-Pentest-Home-Lab", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI渗透测试", "desc": "AI 辅助渗透测试家庭实验室——Claude + Kali Linux使用 MCP 在Windows上自主攻击DVWA", "url": "https://github.com/surya4682/AI-Pentest-Home-Lab"}, {"seq": 94, "name": "rostam-sodagari/AutoPentest", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "1", "category": "AI渗透测试", "desc": "AI 驱动的渗透测试平台——Multi-Agent LLM 推理、Nmap/Shodan/Nuclei扫描管道、沙盒漏洞验证和Kafka解耦持续评估。", "url": "https://github.com/rostam-sodagari/AutoPentest"}, {"seq": 116, "name": "EsraaKamel11/AI-Product-Red-Team-Agent", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "AI/LLM 产品的自主多智能体对抗测试系统。跨 8 个类别的 35 个攻击向量、5 代进化突变、AI-CVSS 评分、Lethal Trifecta 间接注入和 SARIF/HTML/JSON 报告。", "url": "https://github.com/EsraaKamel11/AI-Product-Red-Team-Agent"}, {"seq": 117, "name": "carrickcheah/human-ai-red-team", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "HART——红队 Agentic AI 系统的开源框架。多轮攻击、工具链利用、跨租户泄漏测试。", "url": "https://github.com/carrickcheah/human-ai-red-team"}, {"seq": 118, "name": "Danyy41/indirect-prompt-injection-lab", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "实际操作的 AI 红队实验室演示了对基于 LLM 的 Agent 的 Prompt 注入和间接攻击。", "url": "https://github.com/Danyy41/indirect-prompt-injection-lab"}, {"seq": 122, "name": "Kowshek/redline-ai", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "AI 红队工具 — 4 个对抗性 Agent 在市场出现之前攻击您的商业想法主题：react、typescript、vite、mui、tanstack、recharts、ai", "url": "https://github.com/Kowshek/redline-ai"}, {"seq": 123, "name": "ItsDarker/AI-Red-Teaming-Security-Field-Manual", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "1", "category": "AI红队攻防", "desc": "如何破解 AI Agent 和应用程序 - 安全猎人必须了解的每种攻击向量", "url": "https://github.com/ItsDarker/AI-Red-Teaming-Security-Field-Manual"}, {"seq": 124, "name": "adiKhan12/Red-team-as-API", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "针对 LLM Agent 的 HTTP-API 优先自动红队。五种攻击类别，两个目标适配器，LLM-as-Judge，通过 OpenRouter 提供可审核的理由。自托管，单一二进制文件。评估您的 AI/LLM 应用程序。", "url": "https://github.com/adiKhan12/Red-team-as-API"}, {"seq": 127, "name": "Snakeau/PromptPressure", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "在攻击者之前对您的 AI 进行压力测试。适用于 LLM Agent 和 OpenAI 兼容端点的开放核心本地 AI 红队扫描程序。", "url": "https://github.com/Snakeau/PromptPressure"}, {"seq": 128, "name": "jamarius-fortson/agent-adversarial-tester", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "高性能安全编排引擎，旨在在 AI Agent 投入生产之前对它们进行红队处理。除了简单的测试之外，我们还提供 AI 驱动的攻击演变和映射到全球安全基准的高保真判断。", "url": "https://github.com/jamarius-fortson/agent-adversarial-tester"}, {"seq": 133, "name": "aethryx-ai/aethryx-open-testing-kit", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "开发人员优先的工具包，用于通过真实世界的故障场景、Prompt 攻击和 Agent 风险模拟来测试、红队和评估 LLM 和 AI Agent。", "url": "https://github.com/aethryx-ai/aethryx-open-testing-kit"}, {"seq": 154, "name": "nishantgaurav23/mcpguard", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "AI 驱动的 MCP 安全审核员 - 模型上下文协议服务器的漏洞扫描器", "url": "https://github.com/nishantgaurav23/mcpguard"}, {"seq": 156, "name": "fardeenfarhat/AgentRepoScan", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "用于检测 AI Agent 框架存储库中 OWASP Top 10 LLM 漏洞的静态分析工具 - 无需模型推理。", "url": "https://github.com/fardeenfarhat/AgentRepoScan"}, {"seq": 158, "name": "fabianozonta/HexStrike-AI-Autonomous-AI-Powered-Pentest-Lab", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "该存储库记录了 HexStrike AI 的设置和使用情况，这是一个 MCP（模型上下文协议）平台，可将 AI Agent（例如 Claude 和其他 LLM）连接到 150 多个攻击性安全工具，从而能够自主执行侦察、扫描、漏洞分析等。", "url": "https://github.com/fabianozonta/HexStrike-AI-Autonomous-AI-Powered-Pentest-Lab"}, {"seq": 169, "name": "buildfour/breakpoint-agent", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "对业务模型假设进行压力测试的 AI Agent——场景分析、财务预测、漏洞排名和 Gemini 支持的叙述", "url": "https://github.com/buildfour/breakpoint-agent"}, {"seq": 180, "name": "jasonhausenloy/sleeper-agent-demo", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "后门演示：通过 LoRA 微调在开放权重 AI 模型中隐藏消息", "url": "https://github.com/jasonhausenloy/sleeper-agent-demo"}, {"seq": 182, "name": "fredhead88/backdoor", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "Claude Code Skill：连接任何应用程序，使 AI Agent 可以完全操作它——可发现性、可操作性、可验证性和可自我诊断的故障排除。", "url": "https://github.com/fredhead88/backdoor"}, {"seq": 187, "name": "goldmembrane/cleaner-code", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "AI 代码安全扫描器 MCP Server — 检测不可见的 Unicode、特洛伊木马源代码、同形文字、Glassworm 隐写术、规则文件后门以及 AI 生成的代码中的依赖攻击。静态分析+CodeBERT深度学习。在本地运行。", "url": "https://github.com/goldmembrane/cleaner-code"}, {"seq": 188, "name": "Gmatrix2022/qgis-true-mcp", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "标准 MCP（模型上下文协议）原生 QGIS 插件 — 通过 JSON-RPC 2.0 向 AI 助手公开结构化 GIS 工具。没有execute_code后门。", "url": "https://github.com/Gmatrix2022/qgis-true-mcp"}, {"seq": 189, "name": "Siwaaaar/Zero-Trust-Agent", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "Multi-Agent Prompt 注入扫描器 — 检测所有 AI Agent 生态系统中的恶意技能、CLAUDE.md 后门和渗透 payload", "url": "https://github.com/Siwaaaar/Zero-Trust-Agent"}, {"seq": 191, "name": "TreRB/ai-ide-config-guard", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "扫描存储库中的 AI-IDE 配置文件，这些文件可以通过 Claude Code hooks、Cursor 规则、MCP 自动注册触发 RCE。检测 CVE-2025-59536、CVE-2026-21852、CVE-2026-30615 + Pillar 规则文件后门模式。", "url": "https://github.com/TreRB/ai-ide-config-guard"}, {"seq": 194, "name": "kuswandi/TripStar", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "使用 AI Agent 来规划和管理旅行，在一个平台上创建详细的行程、地图、预算和实时旅行信息。", "url": "https://github.com/kuswandi/TripStar"}, {"seq": 1, "name": "mukul975/Anthropic-Cybersecurity-Skills", "type": "GitHub仓库", "importance": "S", "stars": "6010", "forks": "830", "category": "AI Agent框架安全", "desc": "AI Agent 的 754 项结构化网络安全技能 · 映射到 5 个框架：MITRE ATT&amp;CK、NIST CSF 2.0、MITRE ATLAS、D3FEND 和 NIST AI RMF ·agentskills.io 标准 · 可与 Claude Code、GitHub Copilot、Codex CLI、Cursor、Gemini CLI 和 20 多个平台配合使用 · 26 个安全域 · Apache 2.0", "url": "https://github.com/mukul975/Anthropic-Cybersecurity-Skills"}, {"seq": 29, "name": "gadievron/raptor", "type": "GitHub仓库", "importance": "S", "stars": "2445", "forks": "378", "category": "AI Agent安全", "desc": "Raptor 将 Claude Code 转变为通用 AI 进攻/防御安全 Agent。通过使用 Claude.md 并创建规则、Sub-Agent 和技能，并协调安全工具的使用，我们配置 Agent 以进行对抗性思维，并执行研究或攻击/防御操作。", "url": "https://github.com/gadievron/raptor"}, {"seq": 67, "name": "GH05TCREW/pentestagent", "type": "GitHub仓库", "importance": "S", "stars": "2199", "forks": "445", "category": "AI渗透测试", "desc": "PentestAgent 是一个用于黑盒安全测试的 AI Agent 框架，支持 Bug Bounty、红队和渗透测试工作流程。", "url": "https://github.com/GH05TCREW/pentestagent"}, {"seq": 68, "name": "Armur-Ai/Pentest-Swarm-AI", "type": "GitHub仓库", "importance": "S", "stars": "1012", "forks": "231", "category": "AI渗透测试", "desc": "使用一群 AI Agent 进行自主渗透测试。通过 ReAct 推理协调侦察、分类、利用和报告专家 — 支持 Bug Bounty、持续监控和 CTF 模式。使用 Go、Claude API 和 7+ 本机安全工具构建。", "url": "https://github.com/Armur-Ai/Pentest-Swarm-AI"}]}, {"id": "M2", "title": "M2  大模型安全", "subtitle": "模型后门与植入、模型窃取、训练数据安全、模型供应链安全与审计", "items": [{"seq": 170, "name": "grisuno/LazyOwn", "type": "GitHub仓库", "importance": "A", "stars": "183", "forks": "41", "category": "模型植入后门", "desc": "LazyOwn RedTeam/APT 框架是第一个具有 AI 支持的 C&amp;C 的 RedTeam 框架，具有隐藏活动的 rootkit、与 Windows/Linux/Mac OSX 兼容的不可检测的可延展植入物以及自配置后门。凭借其 Web 界面和强大的控制台客户端，它是您的自治 RedTeam/APT 活动的最佳组合。", "url": "https://github.com/grisuno/LazyOwn"}, {"seq": 229, "name": "polentino/redacted", "type": "GitHub仓库", "importance": "B", "stars": "57", "forks": "3", "category": "AI信息泄漏", "desc": "Scala 库和编译器插件可防止意外泄漏“案例类”中的敏感字段（例如凭证、个人数据和其他机密信息）", "url": "https://github.com/polentino/redacted"}, {"seq": 172, "name": "mtuann/backdoor-ai-resources", "type": "GitHub仓库", "importance": "B", "stars": "35", "forks": "2", "category": "模型植入后门", "desc": "AI/ML 领域的后门内容", "url": "https://github.com/mtuann/backdoor-ai-resources"}, {"seq": 230, "name": "sidi215/debuglog", "type": "GitHub仓库", "importance": "C", "stars": "6", "forks": "", "category": "AI信息泄漏", "desc": "一个自托管、隐私优先的 CLI 工具和 Spring Boot 后端，使用本地 AI (Ollama) 即时调试系统日志，实现零数据泄漏。", "url": "https://github.com/sidi215/debuglog"}, {"seq": 173, "name": "ZhongliangGuo/vibe-guard", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "模型植入后门", "desc": "社区驱动的 Claude 技能，用于检测 AI 生成的代码中的安全后门。", "url": "https://github.com/ZhongliangGuo/vibe-guard"}, {"seq": 231, "name": "nexusrootlab/incident", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "AI信息泄漏", "desc": "公开披露：通过 OpenCode Zen 跨会话数据泄露 (Anomaly Innovations Inc.) — 2026-04-02", "url": "https://github.com/nexusrootlab/incident"}, {"seq": 233, "name": "firework2024/WeChat-Summary", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "AI信息泄漏", "desc": "您的专属微信报道已准备好！从聊天频率、日程偏好，到好友互动、日常表情，本地数据悄悄记录着你的所有小习惯。没有外部授权和隐私泄露，只有本地数据来解读您的私人社交世界。", "url": "https://github.com/firework2024/WeChat-Summary"}, {"seq": 175, "name": "hett-patell/Smoker-backdoor-refined", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "模型植入后门", "desc": "这是 Inknown Smoker 后门 (PHP SHELL) 的改进版本。 Shell 使用 AI 进行了改进。", "url": "https://github.com/hett-patell/Smoker-backdoor-refined"}, {"seq": 176, "name": "AlexAyala18/AI-Security-Machine-Learning-Project", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "模型植入后门", "desc": "机器学习和 AI 安全项目使用 PyTorch 评估模型性能、对抗性攻击和后门鲁棒性。", "url": "https://github.com/AlexAyala18/AI-Security-Machine-Learning-Project"}, {"seq": 234, "name": "privexbot/privexbot", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "5", "category": "AI信息泄漏", "desc": "PrivexBot 是一个无代码 AI 聊天机器人构建器，专注于隐私和数据机密性。它基于 Secret Network 构建，使用可信执行环境 (TEE) 和组织特定的加密来确保零数据泄漏。企业可以安全地创建和管理由秘密 AI 支持的 AI 聊天机器人，而不会泄露敏感信息。", "url": "https://github.com/privexbot/privexbot"}, {"seq": 236, "name": "b-macker/naab-passage", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI信息泄漏", "desc": "🔒 主权数据网关和 PII 保护 - 通过自合成架构实现 LLM 和 API 的零泄漏。符合 HIPAA/GDPR 要求。 NAAb 生态系统的一部分。", "url": "https://github.com/b-macker/naab-passage"}, {"seq": 161, "name": "rauffathigovashin/RFG-Hybrid-SecuritySuit", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "用于漏洞分析的先进 AI 安全套件。具有 OSINT (Shodan/Censys)、自动扫描和 AI 模型安全审核功能。一个基于 Python 的专业工具包，用于全面的网络安全研究、威胁检测和进攻性安全测试。", "url": "https://github.com/rauffathigovashin/RFG-Hybrid-SecuritySuit"}, {"seq": 163, "name": "Mathin-81/Vulna", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "经过训练可以发现代码中的关键漏洞的 AI 模型。", "url": "https://github.com/Mathin-81/Vulna"}, {"seq": 164, "name": "Layerd-AI/Hex", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "任务关键型 AI/ML 模型安全扫描器 - 检测漏洞、恶意软件和合规性问题", "url": "https://github.com/Layerd-AI/Hex"}, {"seq": 179, "name": "AksharSamudrala/Misclassification_using_AI", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "后门扫描和对抗性错误分类分析", "url": "https://github.com/AksharSamudrala/Misclassification_using_AI"}, {"seq": 183, "name": "raquel-cpu/Oz-definitely-not-a-backdoor", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "AI/网络：因为“不可破解”是一个挑战，而不是一个功能", "url": "https://github.com/raquel-cpu/Oz-definitely-not-a-backdoor"}, {"seq": 184, "name": "NewFace02/Defenses-Against-Backdoors-in-AI-Assisted-Compilers", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "1", "category": "模型植入后门", "desc": "", "url": "https://github.com/NewFace02/Defenses-Against-Backdoors-in-AI-Assisted-Compilers"}, {"seq": 185, "name": "Mukesh-SCS/edge-fl-backdoor-security", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "该存储库在边缘 AI 环境的联邦学习系统中实现了后门攻击和轻量级防御机制。", "url": "https://github.com/Mukesh-SCS/edge-fl-backdoor-security"}, {"seq": 186, "name": "rexcoleman/ai-supply-chain-scanner", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "AI 供应链安全扫描仪：检测传统扫描仪遗漏的 ML 特定风险（模型权重中毒、数据集污染、基于梯度的后门）。 AI 的 Snyk。 govML 管辖。", "url": "https://github.com/rexcoleman/ai-supply-chain-scanner"}, {"seq": 190, "name": "KaminariManu/TrustworthyAI_in_CV", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "计算机视觉领域硕士论文值得信赖的 AI 代码的存储库。这是一个统一的框架，用于使用 CNN 和 Transformer 在 CIFAR-10 和 GTSRB 上训练、攻击、防御和报告后门实验。", "url": "https://github.com/KaminariManu/TrustworthyAI_in_CV"}, {"seq": 192, "name": "nidhiposwal/-IMPERCEPTIBLE-WARPING-BASED-BACK-DOOR-ATTACK", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "基于难以察觉的扭曲的后门攻击：该项目演示了使用微妙的空间扭曲作为隐藏触发器对深度学习模型进行的秘密攻击。它评估干净数据与有毒数据的模型行为，并强调 AI 系统中的安全风险。", "url": "https://github.com/nidhiposwal/-IMPERCEPTIBLE-WARPING-BASED-BACK-DOOR-ATTACK"}, {"seq": 193, "name": "Aryan1718/ASTAP", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "模型植入后门", "desc": "ASTAP 是一个平台，您可以在其中从 GitHub 存储库创建 AI 生成的测试用例。其目的是创建测试用例，试图暴露由 AI 生成的代码引起的任何漏洞。它将回溯应用程序并尝试查找任何后门或未公开的 API。", "url": "https://github.com/Aryan1718/ASTAP"}, {"seq": 239, "name": "FastMartini/llm-data-leakage-study", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "该项目将重点关注成员推理攻击，将其作为正在调查的主要隐私漏洞。该项目将实现一个简化的机器学习模型，并模拟成员推理攻击，以确定是否可以将特定数据点识别为训练数据集的一部分。", "url": "https://github.com/FastMartini/llm-data-leakage-study"}, {"seq": 242, "name": "lastbaa/JusticeAI", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "1", "category": "AI信息泄漏", "desc": "隐私第一的法律研究桌面应用程序。使用本地 LLM 完全在您的计算机上运行；无云，无数据泄露。", "url": "https://github.com/lastbaa/JusticeAI"}, {"seq": 245, "name": "kennedyraju55/deposition-summarizer", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "⚖️ Deposition Summarizer — 隐私优先的法律 AI 工具，由 Ollama 的本地 Gemma 4 LLM 提供支持。 100%本地，零数据泄露。", "url": "https://github.com/kennedyraju55/deposition-summarizer"}, {"seq": 246, "name": "kennedyraju55/legal-brief-writer", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "⚖️ Legal Brief Writer — 隐私第一的法律 AI 工具，由当地 Gemma 4 LLM 通过 Ollama 提供支持。 100%本地，零数据泄露。", "url": "https://github.com/kennedyraju55/legal-brief-writer"}, {"seq": 248, "name": "kennedyraju55/legal-case-researcher", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "⚖️ 法律案例研究员 — 隐私优先的法律 AI 工具，由当地 Gemma 4 LLM 通过 Ollama 提供支持。 100%本地，零数据泄露。", "url": "https://github.com/kennedyraju55/legal-case-researcher"}, {"seq": 249, "name": "kennedyraju55/court-filing-generator", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "⚖️ 法庭归档生成器 — 隐私优先的法律 AI 工具，由当地 Gemma 4 LLM 通过 Ollama 提供支持。 100%本地，零数据泄露。", "url": "https://github.com/kennedyraju55/court-filing-generator"}, {"seq": 250, "name": "kennedyraju55/contract-clause-analyzer", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "⚖️ 合同条款分析器 — 隐私优先的法律 AI 工具，由当地 Gemma 4 LLM 通过 Ollama 提供支持。 100%本地，零数据泄露。", "url": "https://github.com/kennedyraju55/contract-clause-analyzer"}, {"seq": 251, "name": "imhamzasajjad/fl_reconstruction", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "“非独立同分布数据能否防止联邦学习中的隐私泄露？”的实施", "url": "https://github.com/imhamzasajjad/fl_reconstruction"}, {"seq": 253, "name": "sedoglia/AI-Privacy-Anonymizer", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "Python 同意使用包含个人内容的各种格式的 Caricare 文件，自动删除 PII（个人身份信息），并在输出文件中生成匿名文件，很快就会导致聊天机器人 AI 泄露数据。", "url": "https://github.com/sedoglia/AI-Privacy-Anonymizer"}]}, {"id": "M3", "title": "M3  Prompt 安全与越狱攻防", "subtitle": "Prompt注入防御、越狱技术、对抗性提示构造、输入过滤与验证机制", "items": [{"seq": 320, "name": "Jailbreaking Guide - LearnPrompting", "type": "越狱指南文章", "importance": "A", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "越狱技术指南", "url": "https://learnprompting.org/docs/prompt_hacking/jailbreaking"}, {"seq": 322, "name": "AI Jailbreak - IBM", "type": "越狱指南文章", "importance": "A", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "IBM 对 AI 越狱的见解", "url": "https://www.ibm.com/think/insights/ai-jailbreak"}, {"seq": 324, "name": "GPTFUZZER", "type": "论文", "importance": "A", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "GPTFUZZER：红队大型语言模型与自动生成的 Jailbreak Prompt", "url": "https://arxiv.org/abs/2309.10253"}, {"seq": 325, "name": "DiffusionAttacker", "type": "论文", "importance": "A", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "DiffusionAttacker：攻击文本到图像的扩散模型", "url": "https://arxiv.org/abs/2412.17522"}, {"seq": 326, "name": "SoP (System on Prompt)", "type": "论文", "importance": "A", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "System Prompt：针对大型语言模型的系统级攻击", "url": "https://arxiv.org/abs/2407.01902"}, {"seq": 327, "name": "Adversarial Prompt Translation", "type": "论文", "importance": "A", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "越狱的对抗性 Prompt Translation", "url": "https://arxiv.org/abs/2410.11317"}, {"seq": 104, "name": "requie/LLMSecurityGuide", "type": "GitHub仓库", "importance": "B", "stars": "80", "forks": "8", "category": "AI红队攻防", "desc": "用于保护大型语言模型 (LLM) 的综合参考。涵盖 OWASP GenAI Top-10 风险、Prompt 注入、对抗性攻击、现实世界事件和实际防御。包括红队工具、Guardrail 和缓解策略的目录，以帮助开发人员、研究人员和安全团队负责任地部署 AI。", "url": "https://github.com/requie/LLMSecurityGuide"}, {"seq": 135, "name": "promptfoo/modelaudit", "type": "GitHub仓库", "importance": "B", "stars": "50", "forks": "8", "category": "AI模型安全", "desc": "AI/ML 模型文件的安全扫描器。在部署前检测恶意代码、后门和漏洞", "url": "https://github.com/promptfoo/modelaudit"}, {"seq": 317, "name": "L1B3RT4S", "type": "越狱工具/仓库", "importance": "B", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "@elder_plinius 的 Jailbreak Prompt 合集", "url": "https://github.com/elder-plinius/L1B3RT4S/tree/main"}, {"seq": 319, "name": "Awesome GPT Super Prompting", "type": "越狱工具/仓库", "importance": "B", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "很棒的 GPT Super Prompt 资源", "url": "https://github.com/CyberAlbSecOP/Awesome_GPT_Super_Prompting"}, {"seq": 321, "name": "How to Jailbreak LLMs", "type": "越狱指南文章", "importance": "B", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "Promptfoo 的 How to Jailbreak LLMs 指南。", "url": "https://www.promptfoo.dev/blog/how-to-jailbreak-llms/"}, {"seq": 323, "name": "Injection &amp; Jailbreaking Blog", "type": "越狱指南文章", "importance": "B", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "学习 Prompt 注入和越狱博客", "url": "https://learnprompting.org/blog/injection_jailbreaking"}, {"seq": 196, "name": "openclay-ai/openclay", "type": "GitHub仓库", "importance": "C", "stars": "9", "forks": "5", "category": "LLM应用安全", "desc": "适用于生产级 LLM 应用程序的运行时安全 AI 工具框架，可防止 Prompt 注入、越狱和对抗性攻击。", "url": "https://github.com/openclay-ai/openclay"}, {"seq": 197, "name": "URDev4ever/LATT", "type": "GitHub仓库", "importance": "C", "stars": "5", "forks": "", "category": "LLM应用安全", "desc": "LLM 攻击测试工具包是一种结构化方法和思维框架，用于测试大型语言模型 (LLM) 应用程序是否存在逻辑滥用、Prompt 注入、越狱和工作流操纵。", "url": "https://github.com/URDev4ever/LATT"}, {"seq": 141, "name": "clolomagico123/ai-security-lab", "type": "GitHub仓库", "importance": "C", "stars": "4", "forks": "", "category": "AI模型安全", "desc": "🤖 使用大型语言模型的先进技术测试和保护 AI 系统，包括越狱和自动漏洞扫描器。", "url": "https://github.com/clolomagico123/ai-security-lab"}, {"seq": 174, "name": "BuildThingsThatBuildthings/github-repo-scanner", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "1", "category": "模型植入后门", "desc": "GitHub 存储库的深度安全审计技能。检测传统扫描仪遗漏的恶意代码、供应链攻击、Prompt 注入、隐藏的 unicode、混淆的 payload、凭证泄露、后门和针对 AI 的漏洞。", "url": "https://github.com/BuildThingsThatBuildthings/github-repo-scanner"}, {"seq": 198, "name": "inferwall/inferwall", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "3", "category": "LLM应用安全", "desc": "适用于 LLM 支持的应用程序的 AI 应用程序防火墙 - 针对 Prompt 注入、越狱和数据泄露的多层检测（启发式、ML 分类器、语义、LLM 判断） - inferwall.com", "url": "https://github.com/inferwall/inferwall"}, {"seq": 112, "name": "aleph-beth/aisec", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI红队攻防", "desc": "AI/LLM 安全性的研究和实验——涵盖 Prompt 注入、对抗性攻击、微调漏洞 (LoRA) 和红队技术。", "url": "https://github.com/aleph-beth/aisec"}, {"seq": 146, "name": "songagona2017-ops/ai-security-scanner", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI模型安全", "desc": "LLM Red Teaming Tool — 针对 AI 语言模型的自动 Prompt 注入漏洞检测", "url": "https://github.com/songagona2017-ops/ai-security-scanner"}, {"seq": 151, "name": "Zerix1337/LLMStrike", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "2", "category": "AI模型安全", "desc": "一个故意存在漏洞的 AI 网络实验室，展示了现实世界中的 LLM 安全缺陷，包括 Prompt 注入、数据泄露、不安全的插件设计和模型滥用。", "url": "https://github.com/Zerix1337/LLMStrike"}, {"seq": 200, "name": "kanekoyuichi/promptgate", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "LLM应用安全", "desc": "适用于 LLM 应用的 Prompt 注入检测和筛选库。", "url": "https://github.com/kanekoyuichi/promptgate"}, {"seq": 202, "name": "tugkanboz/llm-security-scanner", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "LLM应用安全", "desc": "用于 LLM 应用程序的开源红队工具包 Prompt 注入、越狱和数据泄露扫描程序，具有 OWASP LLM Top 10 对齐和一流的土耳其语 payload 支持。", "url": "https://github.com/tugkanboz/llm-security-scanner"}, {"seq": 334, "name": "Jailbreaking Video #1", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "越狱技巧视频", "url": "https://www.youtube.com/watch?v=6Mmevs1877A"}, {"seq": 335, "name": "Jailbreaking Video #2", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "越狱技巧视频", "url": "https://www.youtube.com/watch?v=F_KychntktU"}, {"seq": 336, "name": "Jailbreaking Video #3", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "越狱技巧视频", "url": "https://www.youtube.com/watch?v=CIQe2jdYAJ0"}, {"seq": 337, "name": "Jailbreaking Video #4", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "越狱技巧视频", "url": "https://www.youtube.com/watch?v=BaNXYqcfDyo"}, {"seq": 338, "name": "Jailbreaking Video #5", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "越狱技巧视频", "url": "https://www.youtube.com/watch?v=YatNUON2yOQ"}, {"seq": 339, "name": "Jailbreaking Video #6", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "越狱技巧视频", "url": "https://www.youtube.com/watch?v=LGHaMcP_flA"}, {"seq": 340, "name": "Jailbreaking Video #7", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "越狱技巧视频", "url": "https://www.youtube.com/watch?v=5cEvNO9rZgI"}, {"seq": 341, "name": "Jailbreaking Video #8", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "越狱技巧视频", "url": "https://www.youtube.com/watch?v=9TVG9Oxda0M"}, {"seq": 342, "name": "Jailbreaking Video #9", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "越狱技巧视频", "url": "https://www.youtube.com/watch?v=m5uWKRJhcao"}, {"seq": 126, "name": "poojabarui/RedTeam_Suite", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "使用 Flask 构建的简单的对抗性 AI 测试套件。它模拟安全聊天机器人，生成 Attack Prompt，运行自动化红队测试，并评估敏感数据是否泄漏。旨在以模块化（初学者友好）方式演示 Prompt 注入、payload 突变和基本 AI 安全测试。", "url": "https://github.com/poojabarui/RedTeam_Suite"}, {"seq": 129, "name": "BadAsh99/badash-killchain", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "多应用 LLM 运行时安全框架——跨应用攻击链、Prompt 注入检测、AI 红队。 AIRS 对齐。", "url": "https://github.com/BadAsh99/badash-killchain"}, {"seq": 155, "name": "PrathithShetty/Sentinel-AI", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "适用于 AI 模型的 VirusTotal SentinelAI 可扫描任何 HuggingFace 模型的安全漏洞、CVE、错误配置、Prompt 注入缺陷和偏差，并通过一个命令提供 0-100 的风险评分。", "url": "https://github.com/PrathithShetty/Sentinel-AI"}, {"seq": 157, "name": "CalebPerez1/ai-scanner", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "AI 供应链安全扫描器：扫描 AI/ML 管道是否存在依赖性漏洞、不安全的模型加载、Prompt 注入和暴露的凭据。", "url": "https://github.com/CalebPerez1/ai-scanner"}, {"seq": 203, "name": "talhairfan028-code/llm-security-gateway", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "用于 LLM 应用程序的模块化安全网关，用于检测 Prompt 注入和 PII 泄漏", "url": "https://github.com/talhairfan028-code/llm-security-gateway"}, {"seq": 204, "name": "nithish687894/promptshield", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "LLM 应用程序的自动 Prompt 注入安全扫描器", "url": "https://github.com/nithish687894/promptshield"}, {"seq": 205, "name": "JMartynov/promptscan", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "Prompt 注入扫描程序，可在 LLM 应用程序中检测 Prompt 注入攻击，以免造成数据泄露或不安全操作。", "url": "https://github.com/JMartynov/promptscan"}, {"seq": 206, "name": "MalloryAnn/prompt-injection-defenses", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "使用 Protect AI 的 LLM Guard 对 LLM 应用程序进行输入边界 Prompt 注入检测。", "url": "https://github.com/MalloryAnn/prompt-injection-defenses"}, {"seq": 207, "name": "vdeshmukh203/llm-injection-detector", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "适用于 LLM 应用程序和管道的静态和启发式 Prompt 注入漏洞检测器", "url": "https://github.com/vdeshmukh203/llm-injection-detector"}, {"seq": 209, "name": "Snehadawar/prompt-injection-firewall", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "由 AI 驱动的防火墙，可使用基于规则的过滤、LLM 分类和实时清理来检测和缓解基于 LLM 的应用程序中的 Prompt 注入攻击。", "url": "https://github.com/Snehadawar/prompt-injection-firewall"}, {"seq": 211, "name": "BINDU6686/prompt-injection-detector-", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "用于保护 LLM 应用程序安全的多层 Prompt 注入检测框架 — 都柏林格里菲斯学院硕士论文", "url": "https://github.com/BINDU6686/prompt-injection-detector-"}, {"seq": 212, "name": "brunohomma/05-safeguard-prompt-injection", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "研究生项目 (UNIPDS)，专注于 LLM 应用中的 Prompt 注入安全。演示构建安全可靠 AI 系统的 Guardrail、输入验证和架构策略。", "url": "https://github.com/brunohomma/05-safeguard-prompt-injection"}, {"seq": 213, "name": "CoderunED/llm-prompt-firewall", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "适用于 LLM 应用程序的 AI Prompt 注入检测中间件。", "url": "https://github.com/CoderunED/llm-prompt-firewall"}, {"seq": 214, "name": "mmaakbgm-dotcom/slr-llm-prompt-injection", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "该存储库包含系统文献综述 (SLR)，这是我关于小型 LLM 集成应用程序中的 Prompt 注入攻击的硕士论文的一部分。该手稿目前正在审查出版中。", "url": "https://github.com/mmaakbgm-dotcom/slr-llm-prompt-injection"}, {"seq": 215, "name": "Ashishkumar999/gandalf-llm-prompt-injection-walkthrough", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "使用 Gandalf AI 挑战的 Prompt 注入攻击和 Guardrail 绕过技术的实践演练，映射到 OWASP LLM 应用程序 Top 10 (LLM01)。", "url": "https://github.com/Ashishkumar999/gandalf-llm-prompt-injection-walkthrough"}, {"seq": 216, "name": "ShoaibGit044/LLM-security-getway-system", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "LLM 应用程序的安全网关，使用 FastAPI + Presidio 检测 Prompt 注入、越狱和匿名化 PII。", "url": "https://github.com/ShoaibGit044/LLM-security-getway-system"}, {"seq": 217, "name": "H320-ui/secure_llm_securitygateway", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "用于检测 Prompt 注入和 PII 的 LLM 应用程序的模块化安全网关。 CSC 262 实验室期中考试。", "url": "https://github.com/H320-ui/secure_llm_securitygateway"}, {"seq": 218, "name": "dhritismanoffl/prompt-injection-detection-api", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "Prompt 注入检测 API - LLM 应用程序的安全层，可在推理之前检测 Prompt 注入尝试。该存储库包含公共检测管道和规则；核心评分和 ML 逻辑是私有的。", "url": "https://github.com/dhritismanoffl/prompt-injection-detection-api"}, {"seq": 219, "name": "kushal-soni-official/prompt_injection_detector", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "一种纯 Python 输入清理工具，可在恶意输入到达 AI 之前检测 LLM 支持的应用程序上的 **Prompt 注入** 和 **越狱攻击**。", "url": "https://github.com/kushal-soni-official/prompt_injection_detector"}, {"seq": 220, "name": "Fatima-Jillani/Security-Gateway-Design-for-LLM-Applications", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "该项目设计了一个基于 FastAPI 的安全网关，通过检测 Prompt 注入攻击、使用 Presidio 识别敏感数据以及根据风险执行阻止、屏蔽或允许等策略来保护 LLM。", "url": "https://github.com/Fatima-Jillani/Security-Gateway-Design-for-LLM-Applications"}, {"seq": 221, "name": "IfunanyaO/Prompt-Injection", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "用于评估 LLM 应用程序中的 Prompt 注入攻击和防御的基准测试框架。模拟现实世界的 RAG 系统，测量攻击成功率、效用和拒绝率，并通过自动化实验和可视化报告比较多种防御策略。", "url": "https://github.com/IfunanyaO/Prompt-Injection"}, {"seq": 222, "name": "talharizwan786/Secure-Gateway-Design-for-LLM-Applications", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "LLM 安全系统使用 FastAPI 和 Microsoft Presidio 检测 Prompt 注入攻击，并通过自定义识别器和基于策略的决策引擎屏蔽敏感数据 (PII)。", "url": "https://github.com/talharizwan786/Secure-Gateway-Design-for-LLM-Applications"}, {"seq": 224, "name": "Thsky-21/prompt-guard", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "LLM 应用程序的零依赖 Prompt 注入检测。 Node.js、Edge、浏览器。", "url": "https://github.com/Thsky-21/prompt-guard"}, {"seq": 225, "name": "CollieAI/llm-firewall", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "AI 防火墙和 LLM 安全工具包 - 保护您的 AI 应用程序免受 Prompt 注入、越狱、PII 泄露和对抗性攻击", "url": "https://github.com/CollieAI/llm-firewall"}, {"seq": 226, "name": "abdulrafeyarif-ai/secure_llmgate-way_104-2-.pdf", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "用于检测 Prompt 注入和 PII 的 LLM 应用程序的模块化安全网关。 CSC 262 实验室期中考试。", "url": "https://github.com/abdulrafeyarif-ai/secure_llmgate-way_104-2-.pdf"}, {"seq": 227, "name": "lucasharca/llm_safeguards", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "在 LLM 支持的应用程序中进行**Prompt 注入攻击**和**Guardrail 防御**的教育演示。", "url": "https://github.com/lucasharca/llm_safeguards"}, {"seq": 228, "name": "LoonMORTI/promptshield", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "1", "category": "LLM应用安全", "desc": "🛡️ 使用 PromptShields 保护 LLM 应用程序，PromptShields 是一个强大的安全框架，旨在防止 Prompt 注入、越狱和数据泄露。", "url": "https://github.com/LoonMORTI/promptshield"}]}, {"id": "M4", "title": "M4  AI 驱动安全测试", "subtitle": "AI辅助渗透测试、智能红队、自动化漏洞挖掘、AI安全评估框架", "items": [{"seq": 31, "name": "LLAMATOR-Core/llamator", "type": "GitHub仓库", "importance": "A", "stars": "208", "forks": "19", "category": "AI Agent安全", "desc": "Red Teaming 用于测试聊天机器人和 GenAI 系统的 python 框架。", "url": "https://github.com/LLAMATOR-Core/llamator"}, {"seq": 102, "name": "requie/AI-Red-Teaming-Guide", "type": "GitHub仓库", "importance": "A", "stars": "114", "forks": "20", "category": "AI红队攻防", "desc": "AI 系统的对抗性测试和安全评估的综合指南，帮助组织在攻击者利用漏洞之前识别漏洞。", "url": "https://github.com/requie/AI-Red-Teaming-Guide"}, {"seq": 103, "name": "urcuqui/WhiteHat", "type": "GitHub仓库", "importance": "A", "stars": "110", "forks": "39", "category": "AI红队攻防", "desc": "一系列用于网络钓鱼检测、对抗性机器学习和网络安全研究的 AI 工具。包括 Streamlit/Flask 应用程序、攻击模拟、LoRA 微调以及红队和防御的安全模型评估。", "url": "https://github.com/urcuqui/WhiteHat"}, {"seq": 73, "name": "CommonHuman-Lab/nyxstrike", "type": "GitHub仓库", "importance": "B", "stars": "85", "forks": "22", "category": "AI渗透测试", "desc": "用于进攻性安全研究的 AI 驱动的渗透测试平台", "url": "https://github.com/CommonHuman-Lab/nyxstrike"}, {"seq": 134, "name": "codescan-ai/codescan", "type": "GitHub仓库", "importance": "B", "stars": "52", "forks": "6", "category": "AI模型安全", "desc": "CodeScanAI 是一款开源工具，它利用强大的 AI 模型（OpenAI、Gemini，甚至自托管服务器）来扫描您的代码库以查找可能的安全漏洞。", "url": "https://github.com/codescan-ai/codescan"}, {"seq": 75, "name": "mvster-p/kali-openclaw-usb", "type": "GitHub仓库", "importance": "B", "stars": "40", "forks": "10", "category": "AI渗透测试", "desc": "具有 OpenClaw AI 自动化功能的可启动 Kali Linux USB。便携式渗透测试装备，具有预配置的工作流程、自动文档和下拉节点部署。随处启动，渗透测试一切，不留痕迹。", "url": "https://github.com/mvster-p/kali-openclaw-usb"}, {"seq": 137, "name": "chetstriker/LLMtary", "type": "GitHub仓库", "importance": "B", "stars": "20", "forks": "4", "category": "AI模型安全", "desc": "由 AI 驱动的自主渗透测试平台。 LLM 驱动的针对内部和外部目标的侦察、漏洞分析和利用验证。支持本地 AI（Ollama、LM Studio）和云模型（Claude、GPT-4、Gemini）。 Linux · macOS · Windows", "url": "https://github.com/chetstriker/LLMtary"}, {"seq": 105, "name": "regaan/basilisk", "type": "GitHub仓库", "importance": "B", "stars": "18", "forks": "", "category": "AI红队攻防", "desc": "Basilisk — 具有遗传快速进化功能的开源 AI 红队框架。 GPT-4、Claude、Grok、Gemini 的自动化 LLM 安全测试。 OWASP LLM 前 10 名覆盖范围。 32个攻击模块。", "url": "https://github.com/regaan/basilisk"}, {"seq": 79, "name": "murad-bakirov/BugHunter-AI", "type": "GitHub仓库", "importance": "C", "stars": "8", "forks": "3", "category": "AI渗透测试", "desc": "🔍 使用 AI 驱动的工具自动化渗透测试，该工具具有受网络启发的 GUI 和针对授权测试环境的高效任务调度。", "url": "https://github.com/murad-bakirov/BugHunter-AI"}, {"seq": 81, "name": "fthsrbst/TIRPAN", "type": "GitHub仓库", "importance": "C", "stars": "6", "forks": "", "category": "AI渗透测试", "desc": "自主道德 Guardrail 智能系统——AI 驱动的渗透测试机器人", "url": "https://github.com/fthsrbst/TIRPAN"}, {"seq": 142, "name": "bad-antics/oracle", "type": "GitHub仓库", "importance": "C", "stars": "4", "forks": "", "category": "AI模型安全", "desc": "🔮 Oracle - AI 驱动的漏洞发现引擎。使用 ML 模型和 300 多种模式进行预测性漏洞检测。朱莉娅.", "url": "https://github.com/bad-antics/oracle"}, {"seq": 260, "name": "aethraofficial/aethra-browser", "type": "GitHub仓库", "importance": "C", "stars": "3", "forks": "", "category": "AI黑客工具", "desc": "由 AI 驱动的网络安全浏览器，内置漏洞扫描器、网络拦截器和针对黑客的工具。", "url": "https://github.com/aethraofficial/aethra-browser"}, {"seq": 86, "name": "Salihtaskin/Pentest-Control-Panel", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "1", "category": "AI渗透测试", "desc": "基于网络的渗透测试控制面板，集成了多种安全工具和 AI 辅助分析和报告。", "url": "https://github.com/Salihtaskin/Pentest-Control-Panel"}, {"seq": 87, "name": "frendysanusi/claude-pentest-skills", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "AI渗透测试", "desc": "使用 Claude Code 进行 AI 驱动的 Web 应用程序渗透测试技能", "url": "https://github.com/frendysanusi/claude-pentest-skills"}, {"seq": 89, "name": "zlulalala/TAutoPentest", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "AI渗透测试", "desc": "🔍 使用 TAuto Pentest 自动化安全评估，TAuto Pentest 是一种 AI 驱动的工具，结合了 Nmap 扫描以进行彻底的渗透测试和分析。", "url": "https://github.com/zlulalala/TAutoPentest"}, {"seq": 107, "name": "dariomory/matadore", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "AI红队攻防", "desc": "红队的 AI 攻击面映射。", "url": "https://github.com/dariomory/matadore"}, {"seq": 145, "name": "BigY0shi/LlamaSec", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "AI模型安全", "desc": "LlamaSEC 是一个先进的平台，将尖端机器学习与专业级安全工具相结合。该平台创建了专门的 AI 模型，用于渗透测试、漏洞评估、数字取证和综合安全分析。", "url": "https://github.com/BigY0shi/LlamaSec"}, {"seq": 232, "name": "liule66/ACL26-GraphRAG-Privacy", "type": "GitHub仓库", "importance": "C", "stars": "2", "forks": "", "category": "AI信息泄漏", "desc": "“暴露图检索增强生成中的隐私风险”的官方代码（ACL 2026 调查结果）。评估 GraphRAG 和 LightRAG 系统中的数据提取攻击和隐私泄露。", "url": "https://github.com/liule66/ACL26-GraphRAG-Privacy"}, {"seq": 90, "name": "Pwpatri/IT359-PenTest-Framework", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI渗透测试", "desc": "IT 359 类的 AI 辅助渗透测试框架", "url": "https://github.com/Pwpatri/IT359-PenTest-Framework"}, {"seq": 109, "name": "moelsaka01/AdversaryBench-AI", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI红队攻防", "desc": "用于用于红队 LLM 的 AI 安全基准测试平台，具有跨本地和托管提供商的对抗性攻击、模型比较和鲁棒性分析。", "url": "https://github.com/moelsaka01/AdversaryBench-AI"}, {"seq": 110, "name": "aleenaqeel/Adversarial-Cybersecurity-Simulator", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI红队攻防", "desc": "红队 vs 蓝队 AI — 模拟网络图上的 Minimax/A* 攻击者 vs Greedy Defender", "url": "https://github.com/aleenaqeel/Adversarial-Cybersecurity-Simulator"}, {"seq": 111, "name": "ShivamTheCodingDon/Attack-On-AI", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI红队攻防", "desc": "主动 AI 红队的中央生态系统，拥有跨 NLP、计算机视觉等领域的专业对抗性研究实验室。", "url": "https://github.com/ShivamTheCodingDon/Attack-On-AI"}, {"seq": 114, "name": "szrex/RedOps-AI", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI红队攻防", "desc": "RedOps-AI 是一种 AI 驱动的进攻性安全框架，旨在模拟现实世界的对抗行为、自动化红队操作，并通过智能攻击模拟和分析增强组织安全态势。", "url": "https://github.com/szrex/RedOps-AI"}, {"seq": 115, "name": "The-Christopher-Robin/autonomy-evaluation-harness", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI红队攻防", "desc": "标准化的红队与蓝队评估框架，用于测试 AI 控制的自主系统的攻击和防御。", "url": "https://github.com/The-Christopher-Robin/autonomy-evaluation-harness"}, {"seq": 147, "name": "oguarni/ai-vulnerability-triage", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "1", "category": "AI模型安全", "desc": "🤖 一款 AI 驱动的工具，使用朴素贝叶斯和 BERT 模型对安全漏洞进行优先级排序", "url": "https://github.com/oguarni/ai-vulnerability-triage"}, {"seq": 149, "name": "ajaysingh9374/vibesec", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI模型安全", "desc": "AI 辅助漏洞评估和威胁建模工具（学术项目）", "url": "https://github.com/ajaysingh9374/vibesec"}, {"seq": 150, "name": "lukal-x/awesome-mythos-project-glasswing-patches", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI模型安全", "desc": "迄今为止最强大的 AI 模型！释放太危险了！此列表跟踪其产生的漏洞补丁。", "url": "https://github.com/lukal-x/awesome-mythos-project-glasswing-patches"}, {"seq": 328, "name": "AI Red Teaming Video #1", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "AI 红队视频", "url": "https://www.youtube.com/watch?v=zFRn_RMSPI4"}, {"seq": 329, "name": "AI Red Teaming Video #2", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "AI 红队视频", "url": "https://www.youtube.com/watch?v=nzfPUeB6UjM"}, {"seq": 330, "name": "AI Red Teaming Video #3", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "AI 红队视频", "url": "https://www.youtube.com/watch?v=2WvxYDpXw5s"}, {"seq": 331, "name": "AI Red Teaming Video #4", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "AI 红队视频", "url": "https://www.youtube.com/watch?v=Zw_ulylWrhs"}, {"seq": 332, "name": "AI Red Teaming Video #5", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "AI 红队视频", "url": "https://www.youtube.com/watch?v=gDnNuxpvPis"}, {"seq": 333, "name": "AI Red Teaming Playlist", "type": "YouTube视频", "importance": "C", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "AI 红队视频播放列表", "url": "https://www.youtube.com/playlist?list=PLNg09XqZv0dHVDw7OiiRQJ315HnGHbDbG"}, {"seq": 95, "name": "umashankarak/pii-aware-pentest-demo", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI渗透测试", "desc": "用于 PII 感知渗透测试的 AI 驱动的上下文风险评分框架", "url": "https://github.com/umashankarak/pii-aware-pentest-demo"}, {"seq": 96, "name": "darkclode24/PentestVault", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI渗透测试", "desc": "AI 驱动的渗透测试结果管理器", "url": "https://github.com/darkclode24/PentestVault"}, {"seq": 97, "name": "kele-greet/pentest-ai-framework", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI渗透测试", "desc": "基于 DeepSeek LLM 的 AI 驱动的自动化渗透测试框架", "url": "https://github.com/kele-greet/pentest-ai-framework"}, {"seq": 98, "name": "leonardespi/pentesting-for-dummies", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI渗透测试", "desc": "开放的教育资源，涵盖渗透测试的各个层面，具有 AI 辅助的工作流程，专为在白帽和 Bug Bounty 原则下操作的初级网络安全工程师编写。", "url": "https://github.com/leonardespi/pentesting-for-dummies"}, {"seq": 99, "name": "dharmesh0/AutoPentest_AI", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI渗透测试", "desc": "AI 驱动的自主渗透测试平台", "url": "https://github.com/dharmesh0/AutoPentest_AI"}, {"seq": 100, "name": "tranhieutt/ai_pentest_system", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI渗透测试", "desc": "AI 驱动的自主渗透测试系统", "url": "https://github.com/tranhieutt/ai_pentest_system"}, {"seq": 101, "name": "DLEVI-NVIDIA/pentest-cicd", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI渗透测试", "desc": "AI 驱动的渗透测试 CI/CD 管道 — 黑客马拉松 2026 年 4 月", "url": "https://github.com/DLEVI-NVIDIA/pentest-cicd"}, {"seq": 119, "name": "Pavan8104/llm-red-teaming-framework", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "# Sentinel AI：LLM 红队框架 一个以人为中心的 AI 安全系统，旨在通过对抗性攻击、对齐检查和安全机制来评估和提高大型语言模型 (LLM) 的稳健性。", "url": "https://github.com/Pavan8104/llm-red-teaming-framework"}, {"seq": 120, "name": "achrafElFaiq/ai-red-teaming-framework", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "模块化 LLM 红队框架，用于通过 Garak 的一次性攻击或 PyRIT 的多轮攻击来测试 AI 漏洞", "url": "https://github.com/achrafElFaiq/ai-red-teaming-framework"}, {"seq": 121, "name": "aisec-network/aiattacks-dev", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "AI 攻击：从业者级 AI 红队技术和工具。", "url": "https://github.com/aisec-network/aiattacks-dev"}, {"seq": 125, "name": "yexploit/AARTF---Autonomous-AI-RedTeam-Framework", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "AARTF（自主 AI 红队框架）通过 GUI + CLI 自动化授权安全评估工作流程：快速侦察、服务枚举、漏洞/错误配置映射、攻击路径建议和专业报告（文本/PDF/图形/时间表）。专为 THM/HTB 式实验室而设计。", "url": "https://github.com/yexploit/AARTF---Autonomous-AI-RedTeam-Framework"}, {"seq": 130, "name": "cybermaksx/jarvis_red_team", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "混合渗透测试助手，将确定性自动化（枚举、侦察、工具执行）与 AI 驱动的分析相结合，以进行漏洞解释和攻击面探索。专为可扩展性和现实世界的红队工作流程而设计。我的原始仓库位于 codeberg https://codeberg.org/cybermaksx/jarvis_red_team", "url": "https://github.com/cybermaksx/jarvis_red_team"}, {"seq": 131, "name": "Okaeyboy0/FaceGuard-CyberAI", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "AI 面部识别系统在对抗性攻击（FGSM、PGD）、模型窃取下进行了测试，并使用对抗性训练进行防御。 使用 PyTorch 构建，作为红队与蓝队网络安全评估的一部分。", "url": "https://github.com/Okaeyboy0/FaceGuard-CyberAI"}, {"seq": 132, "name": "b-3llum/pentest-notes", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "手动渗透测试/红队笔记库（黑曜石）。 218 个注释涵盖方法论、侦察、网络、AD、云、AV/EDR 规避、AI/LLM 攻击。", "url": "https://github.com/b-3llum/pentest-notes"}, {"seq": 159, "name": "sunilbhandari123/AI-Model-Vulnerability-Scanner", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "", "url": "https://github.com/sunilbhandari123/AI-Model-Vulnerability-Scanner"}, {"seq": 160, "name": "Sumera01/LLM-Red-Teaming-Adversarial-Vulnerability-Scanning-with-Garak", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "一个实用的 AI 安全研究项目，使用 NVIDIA 的开源红队框架 Garak，根据经验测量针对语言模型的对抗性探测的攻击成功率。", "url": "https://github.com/Sumera01/LLM-Red-Teaming-Adversarial-Vulnerability-Scanning-with-Garak"}, {"seq": 162, "name": "merma1509/ai-security-2nd-attempt", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "AI 安全分析涵盖对抗性攻击、防御和各种隐私漏洞。该实施演示了跨多个攻击向量的漏洞分析以及针对不同模型类型和数据集的防御策略", "url": "https://github.com/merma1509/ai-security-2nd-attempt"}, {"seq": 165, "name": "sapation/DSVulnNet", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "DSVulnNet：用于 AI 生成代码中的漏洞检测的双流模型", "url": "https://github.com/sapation/DSVulnNet"}, {"seq": 166, "name": "AniruddhaPKawarase/claude-vuln-scanner", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "使用 Claude API 的 AI 驱动的漏洞扫描器 — 两遍意图建模 + 分歧检测", "url": "https://github.com/AniruddhaPKawarase/claude-vuln-scanner"}, {"seq": 167, "name": "asdfmotox2/vulnpulse", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "由 AI 驱动的每周软件漏洞情报 — 跟踪整个生态系统中的 CVE，通过 GitHub 模型生成 AI 风险简报", "url": "https://github.com/asdfmotox2/vulnpulse"}, {"seq": 168, "name": "Zoroo2626/ExploitSense", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI模型安全", "desc": "本地优先的漏洞分析工具，可扫描代码中的安全问题，并使用本地 AI 模型以简单的英语解释每个发现。基于 FastAPI 和 React 构建，一切都在您的计算机上运行。", "url": "https://github.com/Zoroo2626/ExploitSense"}, {"seq": 208, "name": "GuntsG/Prompt-Injection-Attacks-and-Defenses-in-LLM-Applications", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "", "url": "https://github.com/GuntsG/Prompt-Injection-Attacks-and-Defenses-in-LLM-Applications"}, {"seq": 244, "name": "Manogna-07/Automated-PII-leakage-scanner", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "创建了一个自动 PII 泄漏扫描器作为浏览器扩展，以提高用户隐私和数据安全性。提供实时警报并帮助防止意外共享敏感信息。", "url": "https://github.com/Manogna-07/Automated-PII-leakage-scanner"}, {"seq": 261, "name": "AkinyemiAI-Security/ai-vulnerability-scanner", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI黑客工具", "desc": "使用道德黑客技术进行 AI 驱动的漏洞检测", "url": "https://github.com/AkinyemiAI-Security/ai-vulnerability-scanner"}, {"seq": 262, "name": "manu-2006/AI-Digital-Twin-Hacker", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI黑客工具", "desc": "🛡 AI Digital Twin Hacker AI 驱动的网络安全扫描仪，可检测漏洞、预测攻击", "url": "https://github.com/manu-2006/AI-Digital-Twin-Hacker"}]}, {"id": "M5", "title": "M5  LLM 应用与部署安全", "subtitle": "LLM应用层安全、RAG安全、API安全、AI安全合规治理与风险管控", "items": [{"seq": 237, "name": "KUSHAL-RV/shadow-work-auditor", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI信息泄漏", "desc": "这是一款企业级 AI 合规和治理中间件，旨在使内部 AI 使用与欧盟 AI 法案和企业数据隐私标准保持一致。 一种智能 Agent，可拦截、清理和审核影子 AI 交互，以防止数据泄露并确保监管透明度。", "url": "https://github.com/KUSHAL-RV/shadow-work-auditor"}, {"seq": 238, "name": "Nivethabharathi1065/Privacy_Pulse", "type": "GitHub仓库", "importance": "C", "stars": "1", "forks": "", "category": "AI信息泄漏", "desc": "Privacy Pulse 是一种安全的机器学习系统，用于在 147 万个电子商务数据集上使用差分隐私和联合学习来检测欺诈。它应用 ε (0.1–10) 的高斯、拉普拉斯和指数噪声，并使用 FedAvg 在 5 个区域客户之间进行训练，而无需共享原始数据，从而确保隐私并降低泄漏风险。", "url": "https://github.com/Nivethabharathi1065/Privacy_Pulse"}, {"seq": 210, "name": "23A91A61D8/Build-a-Prompt-Injection-Defense-System-for-LLM-Applications_", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "", "url": "https://github.com/23A91A61D8/Build-a-Prompt-Injection-Defense-System-for-LLM-Applications_"}, {"seq": 223, "name": "ChaudharyKashanAhmed/LLM-Security-Gateway", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "具有注入检测、PII 屏蔽和基于策略的过滤功能的 LLM 应用程序的安全网关。", "url": "https://github.com/ChaudharyKashanAhmed/LLM-Security-Gateway"}, {"seq": 240, "name": "Rickyg0731/Medical-Android-App-Data-Leakage", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "静态分析工具，通过分析 APK 文件、权限和数据流模式来检测 Android 健身应用中潜在的隐私泄露。", "url": "https://github.com/Rickyg0731/Medical-Android-App-Data-Leakage"}, {"seq": 241, "name": "Meghshah-a/privacy-guardian-ai", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "AI 驱动的系统可使用 OCR、NLP 和实时分析来检测和防止图像、文本和语音中的敏感数据泄露（OTP、密码、个人数据）。", "url": "https://github.com/Meghshah-a/privacy-guardian-ai"}, {"seq": 243, "name": "EricJoel-code/image-leak-detector", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "一种基于 Python 的安全工具，用于数字图像取证和数据泄露防护 (DLP)。检测敏感的 EXIF 元数据，评估隐私风险（GPS、时间戳、编辑软件）并自动进行风险分类。", "url": "https://github.com/EricJoel-code/image-leak-detector"}, {"seq": 247, "name": "cq2000419/privacy-guard", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "OpenClaw 敏感信息外泄检测工具（OpenClaw 隐私数据泄露检测工具）", "url": "https://github.com/cq2000419/privacy-guard"}, {"seq": 252, "name": "Hemanth-Mardi/Privacy-Armor", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "## 🚀 用于实时数据保护的 AI 隐私盾 一种智能系统，通过实时检测和屏蔽敏感信息，充当文本数据的隐私防火墙。它由 NLP 和模式识别提供支持，确保 AI 系统、聊天平台和数字环境中的零数据泄漏。 专为安全 AI 的未来而打造。", "url": "https://github.com/Hemanth-Mardi/Privacy-Armor"}, {"seq": 254, "name": "lakshman199/Aviation-MRO-Local-AI-Assistant-Offline-RAG-Pipeline-", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "用于航空维护 (MRO) 的安全、100% 离线 RAG 管道。使用本地 LLM（通过 Ollama 的 Phi-3）和 ChromaDB 搜索 FAA 技术手册。为机械师提供即时、准确的程序答案，同时确保零数据泄漏并严格遵守航空航天隐私标准。", "url": "https://github.com/lakshman199/Aviation-MRO-Local-AI-Assistant-Offline-RAG-Pipeline-"}, {"seq": 255, "name": "Ashprogrammer29/MyOwnLLM-Enterprise-Grade-Local-RAG-Platform", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "MyOwnLLM 是一个容器化的本地 RAG 生态系统，利用 FastAPI 和 Qdrant 提供安全的多租户文档智能。它通过完全在本地硬件上处理高维向量嵌入和 Llama 3 推理来消除数据泄漏，通过 JWT 保护、用户隔离的检索管道确保 100% 隐私", "url": "https://github.com/Ashprogrammer29/MyOwnLLM-Enterprise-Grade-Local-RAG-Platform"}, {"seq": 256, "name": "asrith4545/apolapragada1_CSC8930_MSCS_Capstone", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "1", "category": "AI信息泄漏", "desc": "该项目使用联邦学习和差分隐私来实现隐私保护入侵检测系统。为了保护敏感的网络数据，客户端在本地训练模型，同时DP防止信息泄露。该系统在 UNSW-NB15 数据集（IID/非 IID）上进行评估，平衡了检测准确性和稳健的数据隐私。", "url": "https://github.com/asrith4545/apolapragada1_CSC8930_MSCS_Capstone"}, {"seq": 257, "name": "TUSHAR91316/Konvert-Website", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "Konvert 是一款注重隐私的移动应用程序，旨在弥合离线安全和基于云的功能之间的差距。与需要将敏感数据上传到未知服务器的传统网络转换器不同，Konvert 使用混合引擎。它完全在设备本地处理敏感文件（如图像），确保零数据泄漏", "url": "https://github.com/TUSHAR91316/Konvert-Website"}, {"seq": 258, "name": "venkatkoushik22/Secure-Local-RAG-Private-Document-Intelligence-Platform", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI信息泄漏", "desc": "隐私第一的 RAG 平台，提供有关文档和代码的本地情报。该系统采用 Meta 的 Llama 3 和 ChromaDB 构建，完全在设备上执行语义搜索和技术分析，以确保零数据泄漏。具有持久矢量数据库和自定义管道，可处理 PDF 和 Python 代码库等多格式文件。", "url": "https://github.com/venkatkoushik22/Secure-Local-RAG-Private-Document-Intelligence-Platform"}, {"seq": 263, "name": "muneeb-zia/safevision-ai", "type": "GitHub仓库", "importance": "D", "stars": "", "forks": "", "category": "AI安全研究", "desc": "由 AI 驱动的安全监控后端 (FastAPI) 和仪表板 (Streamlit) 利用自定义 YOLO 模型来检测建筑工地的安全隐患和校园的安全威胁。", "url": "https://github.com/muneeb-zia/safevision-ai"}]}, {"id": "M6", "title": "M6  AI 安全生态", "subtitle": "技术博客、安全社区、在线课程、学术会议、论文研究与知识传播", "items": [{"seq": 267, "name": "EmbraceTheRed", "type": "Blog", "importance": "A", "stars": "", "forks": "", "category": "AI红队攻防", "desc": "AI 红队和安全研究博客，作者：@wunderwuzzi", "url": "https://embracethered.com/blog/"}, {"seq": 269, "name": "Protect AI Blog", "type": "Blog", "importance": "A", "stars": "", "forks": "", "category": "AI模型安全", "desc": "机器学习模型安全和 AI 安全博客", "url": "https://protectai.com/blog"}, {"seq": 270, "name": "AWS Generative AI Security", "type": "Blog", "importance": "A", "stars": "", "forks": "", "category": "AI应用安全", "desc": "AWS 生成式 AI 安全最佳实践", "url": "https://aws.amazon.com/blogs/security/category/artificial-intelligence/generative-ai/"}, {"seq": 271, "name": "Lakera AI Blog", "type": "Blog", "importance": "A", "stars": "", "forks": "", "category": "LLM应用安全", "desc": "Lakera 的 LLM 安全和 AI 安全博客", "url": "https://www.lakera.ai/blog"}, {"seq": 276, "name": "Cisco AI Safety", "type": "Blog", "importance": "A", "stars": "", "forks": "", "category": "AI应用安全", "desc": "思科 AI 安全和企业安全观点", "url": "https://blogs.cisco.com/news/you-cant-sacrifice-ai-safety-for-ai-speed"}, {"seq": 299, "name": "Google Cloud Gen AI Path", "type": "免费课程", "importance": "A", "stars": "", "forks": "", "category": "教育", "desc": "Google Cloud 生成式 AI 学习路径", "url": "https://www.cloudskillsboost.google/paths/118"}, {"seq": 300, "name": "LearnPrompting", "type": "免费课程", "importance": "A", "stars": "", "forks": "", "category": "教育", "desc": "综合 Prompt Engineering 学习平台", "url": "https://learnprompting.org/"}, {"seq": 308, "name": "Hack A Prompt", "type": "安全竞赛", "importance": "A", "stars": "", "forks": "", "category": "事件", "desc": "及时黑客竞赛", "url": "https://www.hackaprompt.com/"}, {"seq": 310, "name": "Scale AI Summit", "type": "安全会议", "importance": "A", "stars": "", "forks": "", "category": "事件", "desc": "扩大 AI 峰会访问范围", "url": "https://www.scale.com/summit/access"}, {"seq": 311, "name": "CMU AI Red Teaming Workshop", "type": "安全会议", "importance": "A", "stars": "", "forks": "", "category": "事件", "desc": "CMU AI 红队研讨会", "url": "https://insights.sei.cmu.edu/news/ai-red-teaming-workshop-will-explore-best-practices/"}, {"seq": 312, "name": "AISEC Conference", "type": "安全会议", "importance": "A", "stars": "", "forks": "", "category": "事件", "desc": "ACM AISec AI 安全会议", "url": "https://aisec.cc/"}, {"seq": 313, "name": "Checkmarx AI Security Symposium", "type": "安全会议", "importance": "A", "stars": "", "forks": "", "category": "事件", "desc": "Checkmarx AI Security Symposium 2024", "url": "https://info.checkmarx.com/ai-security-symposium-2024"}, {"seq": 316, "name": "Naver Clova Gen AI Red Teaming Challenge", "type": "安全竞赛", "importance": "A", "stars": "", "forks": "", "category": "事件", "desc": "Naver Clova 生成式 AI 红队挑战 2024", "url": "https://clova.ai/en/tech-blog/en-generative-ai-red-teaming-challenge-2024"}, {"seq": 264, "name": "InjectPrompt", "type": "Blog", "importance": "B", "stars": "", "forks": "", "category": "AI应用安全", "desc": "及时注入研究和资源平台", "url": "https://injectprompt.com"}, {"seq": 265, "name": "LearnPrompting Prompt Hacking", "type": "Blog/Guide", "importance": "B", "stars": "", "forks": "", "category": "Prompt注入与越狱", "desc": "全面 Prompt Hacking 文档和教程", "url": "https://learnprompting.org/docs/prompt_hacking/introduction"}, {"seq": 266, "name": "AIBlade", "type": "Blog", "importance": "B", "stars": "", "forks": "", "category": "AI应用安全", "desc": "AI 安全新闻与分析", "url": "https://www.aiblade.net"}, {"seq": 268, "name": "Joseph Thacker", "type": "Blog", "importance": "B", "stars": "", "forks": "", "category": "AI应用安全", "desc": "AI 安全研究员个人博客", "url": "https://josephthacker.com/"}, {"seq": 273, "name": "PurpleSec AI &amp; ML Security", "type": "Blog", "importance": "B", "stars": "", "forks": "", "category": "AI应用安全", "desc": "AI 和机器学习安全学习资源", "url": "https://purplesec.us/learn/ai-security/"}, {"seq": 274, "name": "Wiz AI Security Articles", "type": "Blog", "importance": "B", "stars": "", "forks": "", "category": "AI应用安全", "desc": "Wiz 的热门 AI 安全文章", "url": "https://www.wiz.io/blog/top-10-ai-security-articles"}, {"seq": 275, "name": "Lasso Security Blog", "type": "Blog", "importance": "B", "stars": "", "forks": "", "category": "AI Agent安全", "desc": "AI Agent 和 LLM 安全博客", "url": "https://www.lasso.security/blog"}, {"seq": 278, "name": "Vectra AI Cybersecurity Blog", "type": "Blog", "importance": "B", "stars": "", "forks": "", "category": "AI应用安全", "desc": "AI 驱动的网络安全博客", "url": "https://www.vectra.ai/blog"}, {"seq": 279, "name": "Reversec AI Security Articles", "type": "Blog", "importance": "B", "stars": "", "forks": "", "category": "AI应用安全", "desc": "来自 Reversec Labs 的 AI 安全研究文章", "url": "https://labs.reversec.com/categories/ai-security"}, {"seq": 280, "name": "AI Security Discord #1", "type": "Discord社区", "importance": "B", "stars": "", "forks": "", "category": "社区", "desc": "AI 安全讨论社区", "url": "https://discord.com/channels/1046228027434086460/1349689482651369492"}, {"seq": 281, "name": "AI Security Discord #2", "type": "Discord社区", "importance": "B", "stars": "", "forks": "", "category": "社区", "desc": "AI 安全研究社区", "url": "https://discord.com/channels/1105891499641684019/1235691879492751460"}, {"seq": 283, "name": "AI Village Discord", "type": "Discord社区", "importance": "B", "stars": "", "forks": "", "category": "社区", "desc": "DEF CON AI 村官方 Discord", "url": "https://aivillage.org/discord/"}, {"seq": 284, "name": "Infosec Prep Discord", "type": "Discord社区", "importance": "B", "stars": "", "forks": "", "category": "社区", "desc": "信息安全准备社区", "url": "https://discord.gg/infosecprep"}, {"seq": 285, "name": "Hack The Box Discord", "type": "Discord社区", "importance": "B", "stars": "", "forks": "", "category": "社区", "desc": "Hack The Box 官方社区", "url": "https://discord.gg/hackthebox"}, {"seq": 286, "name": "LHC Discord", "type": "Discord社区", "importance": "B", "stars": "", "forks": "", "category": "社区", "desc": "实时黑客社区", "url": "https://discord.gg/lhc"}, {"seq": 287, "name": "Whitehat Hacking Discord", "type": "Discord社区", "importance": "B", "stars": "", "forks": "", "category": "社区", "desc": "白帽黑客社区", "url": "https://discord.com/invite/whitehat-hacking-429657740562923521"}, {"seq": 294, "name": "Intro to Prompt Hacking", "type": "免费课程", "importance": "B", "stars": "", "forks": "", "category": "教育", "desc": "Prompt Hacking 技术介绍", "url": "https://learnprompting.org/courses/intro-to-prompt-hacking"}, {"seq": 295, "name": "Advanced Prompt Hacking", "type": "免费课程", "importance": "B", "stars": "", "forks": "", "category": "教育", "desc": "高级 Prompt Hacking 防御", "url": "https://learnprompting.org/courses/advanced-prompt-hacking"}, {"seq": 298, "name": "Introduction to Prompt Engineering", "type": "免费课程", "importance": "B", "stars": "", "forks": "", "category": "教育", "desc": "LearnPrompting Prompt Engineering 简介", "url": "https://learnprompting.org/courses/introduction_to_prompt_engineering"}, {"seq": 302, "name": "Fast.ai Course", "type": "免费课程", "importance": "B", "stars": "", "forks": "", "category": "教育", "desc": "Fast.ai 面向程序员的实用深度学习", "url": "https://course.fast.ai/"}, {"seq": 303, "name": "Prompt Engineering Guide", "type": "免费课程", "importance": "B", "stars": "", "forks": "", "category": "教育", "desc": "DAIR-AI 综合 Prompt Engineering 指南", "url": "https://github.com/dair-ai/Prompt-Engineering-Guide"}, {"seq": 304, "name": "EleutherAI", "type": "免费课程", "importance": "B", "stars": "", "forks": "", "category": "教育", "desc": "EleutherAI 开源 AI 研究团体", "url": "https://www.eleuther.ai/"}, {"seq": 305, "name": "AI Security YouTube Playlist", "type": "免费课程", "importance": "B", "stars": "", "forks": "", "category": "教育", "desc": "AI 安全视频播放列表", "url": "https://www.youtube.com/playlist?list=PLNg09XqZv0dEeneAyDR4nxPda8WJBOKAe"}, {"seq": 306, "name": "AI Security Masterclass", "type": "付费课程", "importance": "B", "stars": "", "forks": "", "category": "教育", "desc": "LearnPrompting AI Security Masterclass", "url": "https://learnprompting.org/courses/ai-security-masterclass"}, {"seq": 315, "name": "SANS AI Summit 2025", "type": "安全会议", "importance": "S", "stars": "", "forks": "", "category": "事件", "desc": "2025 年 SANS AI 峰会", "url": "https://www.sans.org/cyber-security-training-events/ai-summit-2025/"}]}];
+
+var typeBadgeClass = {
+  "GitHub仓库": "github",
+  "论文": "paper",
+  "YouTube视频": "video",
+  "越狱指南文章": "guide",
+  "越狱工具/仓库": "github",
+  "Blog": "blog",
+  "Blog/Guide": "blog",
+  "免费课程": "course",
+  "付费课程": "course",
+  "Discord社区": "community",
+  "安全竞赛": "competition",
+  "安全会议": "conference"
+};
+
+var MODULE_COLORS = {
+  M1: "#8b5cf6",
+  M2: "#06b6d4",
+  M3: "#ef4444",
+  M4: "#f59e0b",
+  M5: "#10b981",
+  M6: "#3b82f6"
+};
+var DATA_LAST_UPDATED = "2026-05-07";
+var IMPORTANCE_LABELS = {
+  S: "S 标杆",
+  A: "A 核心",
+  B: "B 重要",
+  C: "C 参考",
+  D: "D 基础"
+};
+var IMPORTANCE_COLORS = {
+  S: "#dc2626",
+  A: "#d97706",
+  B: "#059669",
+  C: "#2563eb",
+  D: "#64748b"
+};
+var IMPORTANCE_RULES = {
+  S: "Stars ≥1000 / 顶级会议 / 行业标准",
+  A: "Stars 100-999 / 知名平台 / 高质量论文",
+  B: "Stars 10-99 / 活跃社区 / 实用工具",
+  C: "Stars 1-9 / 补充资源 / 入门材料",
+  D: "Stars 0 / 新创建 / 待观察"
+};
+var state = { module: null, category: null, importance: "", type: "", sort: "priority", query: "" };
+var decoder = document.createElement("textarea");
+
+function typeIcon(t) {
+  var m = {
+    "GitHub仓库":"⬡", "论文":"📄", "YouTube视频":"▶",
+    "越狱指南文章":"📖", "越狱工具/仓库":"🔧", "Blog":"✍",
+    "Blog/Guide":"✍", "免费课程":"🎓", "付费课程":"💎",
+    "Discord社区":"💬", "安全竞赛":"🏆", "安全会议":"🎤"
+  };
+  return m[t] || "📌";
+}
+
+function normalizeText(value) {
+  decoder.innerHTML = value == null ? "" : String(value);
+  return decoder.value;
+}
+function h(value) {
+  return normalizeText(value).replace(/[&<>"']/g, function(ch) {
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch];
+  });
+}
+function jsArg(value) {
+  return JSON.stringify(String(value == null ? "" : value))
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;");
+}
+function moduleClass(id) { return "mod-" + id; }
+function moduleColor(id) { return MODULE_COLORS[id] || "#0f172a"; }
+function moduleName(mod) { return normalizeText(mod.title).replace(new RegExp("^" + mod.id + "\\s*"), "").trim(); }
+function parseNum(n) {
+  if (n === null || n === undefined || n === "") return 0;
+  var v = parseInt(String(n).replace(/,/g, ""), 10);
+  return isNaN(v) ? 0 : v;
+}
+function fmtNum(n) {
+  n = parseNum(n);
+  if (!n) return "0";
+  if (n >= 10000) return (n / 10000).toFixed(1).replace(/\.0$/, "") + "w";
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "k";
+  return String(n);
+}
+function pct(part, total) { return total ? Math.round(part / total * 1000) / 10 : 0; }
+function truncateText(value, maxLen) {
+  var text = normalizeText(value).trim();
+  return text.length > maxLen ? text.slice(0, maxLen - 1) + "…" : text;
+}
+function importanceWeight(v) { return {S:5, A:4, B:3, C:2, D:1}[v] || 0; }
+function safeUrl(value) {
+  var raw = normalizeText(value).trim();
+  if (!raw) return "";
+  try {
+    var url = new URL(raw, window.location.href);
+    if (url.protocol === "http:" || url.protocol === "https:" || url.protocol === "mailto:") return url.href;
+  } catch (e) {}
+  return "";
+}
+function hostName(url) {
+  if (!url) return "未提供 URL";
+  try { return new URL(url).hostname.replace(/^www\./, ""); } catch (e) { return "外部资源"; }
+}
+function allItems() {
+  var out = [];
+  DATA.forEach(function(mod) { mod.items.forEach(function(it) { out.push({ mod: mod, item: it }); }); });
+  return out;
+}
+function uniqueSorted(values) {
+  var seen = {}, out = [];
+  values.forEach(function(v) { v = normalizeText(v).trim(); if (v && !seen[v]) { seen[v] = true; out.push(v); } });
+  return out.sort(function(a, b) { return a.localeCompare(b, "zh-CN"); });
+}
+function getStats() {
+  var flat = allItems();
+  var types = {}, cats = {}, imp = {}, github = 0, urls = 0;
+  flat.forEach(function(row) {
+    var it = row.item;
+    if (it.type) types[normalizeText(it.type)] = true;
+    if (it.category) cats[normalizeText(it.category)] = true;
+    if (it.importance) imp[it.importance] = (imp[it.importance] || 0) + 1;
+    if (it.type === "GitHub仓库") github++;
+    if (safeUrl(it.url)) urls++;
+  });
+  return {
+    total: flat.length,
+    modules: DATA.length,
+    types: Object.keys(types).length,
+    categories: Object.keys(cats).length,
+    github: github,
+    urlRate: pct(urls, flat.length),
+    imp: imp
+  };
+}
+function moduleStats(mod) {
+  var s = { total: mod.items.length, s: 0, a: 0, categories: {}, github: 0 };
+  mod.items.forEach(function(it) {
+    if (it.importance === "S") s.s++;
+    if (it.importance === "A") s.a++;
+    if (it.category) s.categories[normalizeText(it.category)] = true;
+    if (it.type === "GitHub仓库") s.github++;
+  });
+  s.categoryCount = Object.keys(s.categories).length;
+  return s;
+}
+
+function buildFilterOptions() {
+  var types = uniqueSorted(allItems().map(function(row) { return row.item.type; }));
+  var importance = ["S", "A", "B", "C", "D"];
+  document.getElementById("importance-filter").innerHTML = '<option value="">全部等级</option>' +
+    importance.map(function(v) { return '<option value="' + h(v) + '">' + h(IMPORTANCE_LABELS[v]) + '</option>'; }).join("");
+  document.getElementById("type-filter").innerHTML = '<option value="">全部类型</option>' +
+    types.map(function(v) { return '<option value="' + h(v) + '">' + h(v) + '</option>'; }).join("");
+}
+
+function buildNav() {
+  var html = '<div class="nav-section"><button class="nav-section-title" type="button" onclick="resetModuleOnly()"><span class="label"><span class="dot"></span><b>全局概览</b></span><span class="count">ALL</span></button></div>';
+  DATA.forEach(function(mod, index) {
+    var stats = moduleStats(mod);
+    var cats = Object.keys(stats.categories).sort(function(a, b) { return a.localeCompare(b, "zh-CN"); });
+    var open = index === 0 || state.module === mod.id;
+    html += '<div class="nav-section ' + moduleClass(mod.id) + '">';
+    html += '<button class="nav-section-title ' + moduleClass(mod.id) + (state.module === mod.id ? ' active' : '') + '" type="button" onclick="toggleNav(this)" data-mod="' + h(mod.id) + '">';
+    html += '<span class="label"><span class="dot"></span><b>' + h(mod.id + ' ' + moduleName(mod)) + '</b></span>';
+    html += '<span class="count">' + stats.total + '</span>';
+    html += '</button>';
+    html += '<div class="nav-categories ' + (open ? 'open' : '') + '" id="nav-' + h(mod.id) + '">';
+    html += '<a class="nav-cat ' + (state.module === mod.id && !state.category ? 'active' : '') + '" href="#mod-' + h(mod.id) + '" onclick="scrollToMod(' + jsArg(mod.id) + '); return false;">全部资源<em>' + stats.total + '</em></a>';
+    cats.forEach(function(c) {
+      var count = mod.items.filter(function(it) { return normalizeText(it.category) === c; }).length;
+      html += '<a class="nav-cat ' + (state.module === mod.id && state.category === c ? 'active' : '') + '" href="#mod-' + h(mod.id) + '" onclick="scrollToCat(' + jsArg(mod.id) + ',' + jsArg(c) + '); return false;">' + h(c) + '<em>' + count + '</em></a>';
+    });
+    html += '</div></div>';
+  });
+  document.getElementById("nav-sections").innerHTML = html;
+}
+function toggleNav(el) {
+  var mod = el.dataset.mod;
+  var cats = document.getElementById("nav-" + mod);
+  if (cats) cats.classList.toggle("open");
+}
+function scrollToMod(id) {
+  state.module = id;
+  state.category = null;
+  renderAll();
+  setTimeout(function() {
+    var el = document.getElementById("mod-" + id);
+    if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  }, 0);
+}
+function scrollToCat(id, cat) {
+  state.module = id;
+  state.category = cat;
+  renderAll();
+  setTimeout(function() {
+    var el = document.getElementById("mod-" + id);
+    if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  }, 0);
+}
+function filterByCat(modId, cat) { state.module = modId; state.category = cat; renderAll(); }
+function resetModuleOnly() { state.module = null; state.category = null; renderAll(); window.scrollTo({top:0, behavior:"smooth"}); }
+function handleSearch(value) { state.query = normalizeText(value).toLowerCase().trim(); renderAll(); }
+function setImportanceFilter(value) { state.importance = value; renderAll(); }
+function setTypeFilter(value) { state.type = value; renderAll(); }
+function setSortMode(value) { state.sort = value || "priority"; renderAll(); }
+function resetFilters() {
+  state = { module: null, category: null, importance: "", type: "", sort: "priority", query: "" };
+  document.getElementById("search").value = "";
+  syncControls();
+  renderAll();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function syncControls() {
+  document.getElementById("importance-filter").value = state.importance;
+  document.getElementById("type-filter").value = state.type;
+  document.getElementById("sort-mode").value = state.sort;
+}
+
+function sortItems(items) {
+  return items.slice().sort(function(a, b) {
+    if (state.sort === "stars") return parseNum(b.stars) - parseNum(a.stars) || importanceWeight(b.importance) - importanceWeight(a.importance) || parseNum(a.seq) - parseNum(b.seq);
+    if (state.sort === "seq") return parseNum(a.seq) - parseNum(b.seq);
+    if (state.sort === "name") return normalizeText(a.name).localeCompare(normalizeText(b.name), "zh-CN");
+    return importanceWeight(b.importance) - importanceWeight(a.importance) || parseNum(b.stars) - parseNum(a.stars) || parseNum(a.seq) - parseNum(b.seq);
+  });
+}
+function itemMatchesQuery(it, query) {
+  if (!query) return true;
+  var fields = [it.name, it.desc, it.category, it.type, it.importance, it.url].map(normalizeText).join(" ").toLowerCase();
+  return fields.indexOf(query) >= 0;
+}
+function getFilteredItems(mod) {
+  if (state.module && state.module !== mod.id) return [];
+  var items = mod.items.slice();
+  if (state.category && state.module === mod.id) items = items.filter(function(it) { return normalizeText(it.category) === state.category; });
+  if (state.importance) items = items.filter(function(it) { return it.importance === state.importance; });
+  if (state.type) items = items.filter(function(it) { return normalizeText(it.type) === state.type; });
+  if (state.query) items = items.filter(function(it) { return itemMatchesQuery(it, state.query); });
+  return sortItems(items);
+}
+
+function renderDashboard() {
+  var stats = getStats();
+  var html = '<div class="overview-grid">';
+  html += '<div class="kpi-card" style="--accent:#0f172a"><div class="kpi-value">' + stats.total + '条</div><div class="kpi-label">资源总数</div><div class="kpi-desc">覆盖六大 AI 安全攻击面</div></div>';
+  html += '<div class="kpi-card" style="--accent:#334155"><div class="kpi-value">' + stats.github + '个</div><div class="kpi-label">GitHub仓库</div><div class="kpi-desc">开源工具与框架为主</div></div>';
+  html += '<div class="kpi-card" style="--accent:#dc2626"><div class="kpi-value">' + (stats.imp.S || 0) + '个</div><div class="kpi-label">S级资源</div><div class="kpi-desc">标杆级影响力</div></div>';
+  html += '<div class="kpi-card" style="--accent:#d97706"><div class="kpi-value">' + (stats.imp.A || 0) + '个</div><div class="kpi-label">A级资源</div><div class="kpi-desc">核心级质量</div></div>';
+  html += '<div class="kpi-card" style="--accent:#10b981"><div class="kpi-value">' + stats.urlRate + '%</div><div class="kpi-label">URL覆盖</div><div class="kpi-desc">当前页面链接收录率</div></div>';
+  html += '</div>';
+
+  html += '<div class="dashboard-grid">';
+  html += '<div class="panel"><div class="panel-header"><div><h2>AI安全六大模块分布</h2><p>参考工作簿的 M1-M6 彩色模块体系</p></div><strong>' + stats.modules + ' 个模块</strong></div><div class="module-distribution">';
+  DATA.forEach(function(mod) {
+    var ms = moduleStats(mod);
+    var rate = pct(ms.total, stats.total);
+    html += '<div class="dist-row ' + moduleClass(mod.id) + '" style="--pct:' + rate + '%">';
+    html += '<div class="dist-name"><span class="dot"></span><span>' + h(moduleName(mod)) + '</span></div>';
+    html += '<div class="dist-count">' + ms.total + '</div><div class="dist-rate">' + rate + '%</div><div class="bar-track"><div class="bar-fill"></div></div></div>';
+  });
+  html += '</div></div>';
+
+  html += '<div class="panel"><div class="panel-header"><div><h2>重要性分级分布</h2><p>S/A/B/C/D 与参考表标准一致</p></div><strong>' + Object.keys(IMPORTANCE_LABELS).length + ' 档</strong></div><div class="importance-distribution">';
+  ["S", "A", "B", "C", "D"].forEach(function(level) {
+    var count = stats.imp[level] || 0;
+    var rate = pct(count, stats.total);
+    html += '<div class="dist-row importance-row" style="--pct:' + rate + '%; --grade-color:' + IMPORTANCE_COLORS[level] + '; --module-color:' + IMPORTANCE_COLORS[level] + '">';
+    html += '<div class="dist-name"><span>' + h(IMPORTANCE_LABELS[level]) + '</span></div><div class="dist-count">' + count + '</div><div class="dist-rate">' + rate + '%</div><div class="bar-track"><div class="bar-fill"></div></div></div>';
+  });
+  html += '</div><div class="legend-note">S：' + h(IMPORTANCE_RULES.S) + '；A：' + h(IMPORTANCE_RULES.A) + '；B/C/D 依次为重要、参考、基础资源。</div></div>';
+  html += '</div>';
+  document.getElementById("dashboard").innerHTML = html;
+}
+
+function renderTags(mod) {
+  var stats = moduleStats(mod);
+  var cats = Object.keys(stats.categories).sort(function(a, b) { return a.localeCompare(b, "zh-CN"); });
+  var html = '<div class="tags">';
+  html += '<button class="tag ' + (state.module === mod.id && !state.category ? 'active' : '') + '" type="button" onclick="scrollToMod(' + jsArg(mod.id) + ')">全部 <span>' + mod.items.length + '</span></button>';
+  cats.forEach(function(c) {
+    var count = mod.items.filter(function(it) { return normalizeText(it.category) === c; }).length;
+    html += '<button class="tag ' + (state.module === mod.id && state.category === c ? 'active' : '') + '" type="button" onclick="scrollToCat(' + jsArg(mod.id) + ',' + jsArg(c) + ')">' + h(c) + ' <span>' + count + '</span></button>';
+  });
+  html += '</div>';
+  return html;
+}
+function renderBadges(it) {
+  var html = "";
+  if (it.importance) html += '<span class="badge badge-' + h(it.importance) + '">' + h(IMPORTANCE_LABELS[it.importance] || (it.importance + "级")) + '</span>';
+  if (it.type) html += '<span class="badge badge-' + h(typeBadgeClass[it.type] || "") + '">' + h(it.type) + '</span>';
+  if (it.category) html += '<span class="category-pill">' + h(it.category) + '</span>';
+  return html;
+}
+function renderCard(mod, it) {
+  var url = safeUrl(it.url);
+  var title = h(truncateText(it.name, 86));
+  var fullTitle = h(it.name);
+  var domain = h(hostName(url));
+  var stats = [];
+  if (parseNum(it.stars)) stats.push('<span>⭐ ' + fmtNum(it.stars) + '</span>');
+  if (parseNum(it.forks)) stats.push('<span>🍴 ' + fmtNum(it.forks) + '</span>');
+  stats.push('<span>序号 #' + h(it.seq || "-") + '</span>');
+  var html = '<article class="card ' + moduleClass(mod.id) + '">';
+  html += '<div class="card-header"><div class="seq-badge">' + h(mod.id) + '</div><div class="card-title-wrap">';
+  if (url) html += '<a class="card-title" href="' + h(url) + '" title="' + fullTitle + '" target="_blank" rel="noopener noreferrer"><span class="icon">' + typeIcon(it.type) + '</span>' + title + '</a>';
+  else html += '<span class="card-title" title="' + fullTitle + '"><span class="icon">' + typeIcon(it.type) + '</span>' + title + '</span>';
+  html += '<div class="card-meta">' + renderBadges(it) + '</div></div></div>';
+  html += '<div class="card-stats">' + stats.join("") + '</div>';
+  if (it.desc) html += '<p class="card-desc">' + h(it.desc) + '</p>';
+  html += '<div class="card-footer"><span class="domain">' + domain + '</span>';
+  if (url) html += '<a class="card-link" href="' + h(url) + '" target="_blank" rel="noopener noreferrer">访问 →</a>';
+  html += '</div></article>';
+  return html;
+}
+
+function renderAll() {
+  var totalVisible = 0;
+  var html = "";
+  DATA.forEach(function(mod) {
+    var items = getFilteredItems(mod);
+    if (!items.length) return;
+    var ms = moduleStats(mod);
+    totalVisible += items.length;
+    html += '<section class="section ' + moduleClass(mod.id) + '" id="mod-' + h(mod.id) + '">';
+    html += '<div class="section-head"><div><div class="section-kicker">' + h(mod.id) + ' · ' + ms.categoryCount + ' 个细分分类</div><h2 class="section-title">' + h(moduleName(mod)) + '</h2><p class="section-desc">' + h(mod.subtitle) + '</p></div>';
+    html += '<div class="section-count">' + items.length + '<span>当前显示 / 共 ' + ms.total + '</span></div></div>';
+    html += renderTags(mod);
+    html += '<div class="cards">' + items.map(function(it) { return renderCard(mod, it); }).join("") + '</div></section>';
+  });
+  if (!html) html = '<div class="no-results"><strong>未找到匹配资源</strong><br>请尝试更换关键词，或重置等级、类型、模块筛选。</div>';
+  document.getElementById("content").innerHTML = html;
+  document.getElementById("total-count") && (document.getElementById("total-count").textContent = totalVisible);
+  document.getElementById("side-total").textContent = getStats().total;
+  document.getElementById("side-modules").textContent = DATA.length;
+  syncControls();
+  buildNav();
+}
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "/" && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "SELECT") {
+    e.preventDefault();
+    document.getElementById("search").focus();
+  }
+});
+
+buildFilterOptions();
+renderDashboard();
+renderAll();
+</script>
+</body>
+</html>
