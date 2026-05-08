@@ -7,3 +7,8 @@
 ![2](./image/2.png)
 
 ![3](./image/3.png)
+
+## Skills
+
+![4](./image/4.png)
+
